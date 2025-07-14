@@ -30,9 +30,9 @@ Webpack’s Role: As discussed in your previous questions, Webpack integrates Ba
 
 If we don't want to use JSX, we can use:
 
-a) `React.createElement`  
-b) `react-hyperscript`  
-c) `htm`
+a) `React.createElement`- Its main, directly create React elements(beneath JSX). 
+b) `react-hyperscript`  - A JavaScript function (often h) that mimics JSX-like syntax without the HTML-like structure.
+c) `htm` - allow writing HTML-like code using tagged template literals, which are processed into React elements without JSX.
 
 ---
 
