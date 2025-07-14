@@ -127,3 +127,13 @@ function App() {
 Real DOM is slow, direct updates trigger costly repaint.Bad for maps, etc.
 
 Virtual DOM is fast and it is lighweight JS object tree. React updates virtual DOM and updates only necessary real DOM parts.
+
+
+## React’s ecosystem has shifted to faster bundlers and transpilers:
+
+Tool	JSX Transpilation by
+Vite	✅ ESBuild (not Babel)
+Next.js	✅ SWC (Rust-based compiler)
+Create React App (CRA)	✅ Babel (still uses it under the hood)
+
+
