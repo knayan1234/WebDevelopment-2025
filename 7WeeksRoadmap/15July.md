@@ -122,9 +122,8 @@ function App() {
 }
 ```
 
-## Why React Uses Virtual DOM and React.createElement under the hood and nor Real DOM?
+## Why React Uses Virtual DOM and React.createElement under the hood and not Real DOM?
 
-React DOM is slow, direct updates trigger costly repaint.
-Bad for maps, etc.
+Real DOM is slow, direct updates trigger costly repaint.Bad for maps, etc.
 
 Virtual DOM is fast and it is lighweight JS object tree. React updates virtual DOM and updates only necessary real DOM parts.
