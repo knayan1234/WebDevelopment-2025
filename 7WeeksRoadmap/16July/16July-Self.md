@@ -19,7 +19,7 @@ Yes, props is an object: When you pass props to a child component (e.g., ``` <Ch
 
 ## ways to send props from parent component?
 
-1. props forwarding i.e use spread opeartor
+1. use spread opeartor
 2. normal way
 3. whole function
 4. children
