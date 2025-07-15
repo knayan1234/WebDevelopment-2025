@@ -24,17 +24,21 @@ Webpack’s Role: As discussed in your previous questions, Webpack integrates Ba
 
 ## Compilation process of JSX
 
--1) User write code in JSX. 2) Babel reads the file and transform it into createElement calls. 3) Webpack processes the transpiled JS , along with other assets into a bundle. 4) Webpack generates a bundle.js in the build directory. 5) Browser reads the bundle and renders the virtual DOM and updates the real DOM if needed.
+1. User write code in JSX.
+2. Babel reads the file and transform it into createElement calls.
+3. Webpack processes the transpiled JS , along with other assets into a bundle.
+4. Webpack generates a bundle.js in the build directory.
+5. Browser reads the bundle and renders the virtual DOM and updates the real DOM if needed.
 
 ## Alternative to JSX?
 
 If we don't want to use JSX, we can use:
 
-a) `React.createElement` 
- Its main, directly create React elements(beneath JSX). 
+a) `React.createElement`
+Its main, directly create React elements(beneath JSX).
 b) `react-hyperscript`  
 A JavaScript function (often h) that mimics JSX-like syntax without the HTML-like structure.
-c) `htm` 
+c) `htm`
 Allows writing HTML-like code using tagged template literals, which are processed into React elements without JSX.
 
 ---
@@ -128,12 +132,9 @@ Real DOM is slow, direct updates trigger costly repaint.Bad for maps, etc.
 
 Virtual DOM is fast and it is lighweight JS object tree. React updates virtual DOM and updates only necessary real DOM parts.
 
-
 ## React’s ecosystem has shifted to faster bundlers and transpilers:
 
-Tool	JSX Transpilation by
-Vite	✅ ESBuild (not Babel)
-Next.js	✅ SWC (Rust-based compiler)
-Create React App (CRA)	✅ Babel (still uses it under the hood)
-
-
+Tool JSX Transpilation by
+Vite ✅ ESBuild (not Babel)
+Next.js ✅ SWC (Rust-based compiler)
+Create React App (CRA) ✅ Babel (still uses it under the hood)
