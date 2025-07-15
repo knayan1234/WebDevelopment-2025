@@ -48,7 +48,7 @@ when we want to give some content inside custom made tags like we do in simple h
 | **Relation to JSX**    | Part of `React.createElement` props object.     | Updates virtual DOM on change.              |
 | **Backend Tie**        | Pass API data (e.g., `REACT_APP_API_URL`).      | Store API data for rendering.               |
 
-> updating extra info
+### updating extra info
 
 ## state in functional and class components
 
