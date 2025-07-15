@@ -47,3 +47,22 @@ when we want to give some content inside custom made tags like we do in simple h
 | **Use Case**           | Pass data, callbacks, children.                 | Manage form inputs, API data, toggles.      |
 | **Relation to JSX**    | Part of `React.createElement` props object.     | Updates virtual DOM on change.              |
 | **Backend Tie**        | Pass API data (e.g., `REACT_APP_API_URL`).      | Store API data for rendering.               |
+
+> Updating something after looking in 16July-other.md (below everything)
+
+## state in functional vs Class
+
+| **Aspect**             | **Functional (`useState`)**                    | **Class (`this.setState`)**                      |
+| ---------------------- | ---------------------------------------------- | ------------------------------------------------ |
+| **Usage**              | `const [state, setState] = useState(initial);` | `this.state` and `this.setState({ ... })`        |
+| **Mutability**         | Mutable via `setState`; immutable updates.     | Mutable via `setState`; immutable updates.       |
+| **Direct Mutation**    | Not allowed (e.g., `state++` fails).           | Not allowed (e.g., `this.state++` fails).        |
+| **Triggers Re-render** | Yes, via `setState`.                           | Yes, via `setState`.                             |
+| **Example**            | `setCount(count + 1)`                          | `this.setState({ count: this.state.count + 1 })` |
+| **Props Connection**   | Pass state as props (e.g., `{...state}`).      | Pass state as props (e.g., `{...this.state}`).   |
+
+**Why It Matters**: State mutability via setters ensures re-renders for dynamic UIs. Functional components use `useState` (not available in classes); classes use `setState`. Both require immutable updates for React’s virtual DOM.
+
+## Q: Is useState mutable in class and functional components?
+
+A: "useState is only used in functional components, where state is mutable via its setter (e.g., setCount), but updates must be immutable to trigger re-renders. Class components use this.setState instead, also requiring immutable updates. For example, setCount(count + 1) or this.setState({ count: this.state.count + 1 }) ensures virtual DOM updates. Direct mutation fails to re-render."
