@@ -7,7 +7,7 @@
 
 ## Is props are objects?
 
-Yes, props is an object: When you pass props to a child component (e.g., <Child name="Alice" age={30} />), React combines all props into a single object that the child receives.
+Yes, props is an object: When you pass props to a child component (e.g., ``` <Child name="Alice" age={30} />``` , React combines all props into a single object that the child receives.
 
 ## ways to use props in child components?
 
