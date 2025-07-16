@@ -1,0 +1,82 @@
+controlled and uncontrolled components
+
+These concepts define how form data is handled within a React component.
+controlled components(form elements such as input,textarea etc) are managed by react state so its controlled by react itself , since its based on state it will update only through setStatemethod
+while uncontrolled (input fields read only or pre-filled ,text area )components manage their own states and behaviour with the help of DOM 
+controlled ... uses react state - onChange will update state value on every change while uncontrolled ... uses react ref and its value gets update on demand basis via ref
+
+when it come to form validation since state updates on every change its easy to validate but in ref its not updating everytime so check once on submit or based on demand
+but since state more re-render will happen and more code , useRef dont have that many code and re-render
+
+
+controlled component example
+// ParentComponent.jsx
+import React, { useState } from 'react';
+import ChildComponent from './ChildComponent';
+
+function ParentComponent() {
+  const [inputValue, setInputValue] = useState('');
+
+  return (
+    <div>
+      <h1>Controlled Component Example</h1>
+      <ChildComponent value={inputValue} setValue={setInputValue} />
+    </div>
+  );
+}
+
+export default ParentComponent;
+
+// ChildComponent.jsx
+import React from 'react';
+
+function ChildComponent({ value, setValue }) {
+  const handleChange = (event) => {
+    setValue(event.target.value);
+  };
+
+  return (
+    <form>
+      <label>
+        Name:
+        <input type="text" value={value} onChange={handleChange} />
+      </label>
+    </form>
+  );
+}
+
+export default ChildComponent;
+
+
+mainly if multiple child component need to reuse the updation to make it reusable we ususlly convert to parent and child so here ehenever a change happens it will first
+rerender parent and eventually child
+
+uncontrolled components helps in erformance and simplicity but makes form validation challenging 
+
+import { useRef } from "react";
+
+function UncontrolledInput() {
+  const inputRef = useRef(null); // Ref to access input value
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    alert(`You entered: ${inputRef.current.value}`); // Get value when needed
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input type="text" ref={inputRef} />
+      <button type="submit">Submit</button>
+    </form>
+  );
+}
+
+export default UncontrolledInput;
+
+Harder to implement real-time validation (React doesn’t know what’s happening inside). and not ideal for complex validations
+
+
+conclusion
+Use controlled components when you need full control over the input value.
+Use uncontrolled components when you only need the value at the end (e.g., form submission).
+If you want the best of both worlds, you can mix both!
