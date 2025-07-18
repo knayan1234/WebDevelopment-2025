@@ -36,7 +36,7 @@ React updates only what has changed, not the entire DOM tree.
 
 ---
 
-## Diffing Algorithm
+## Diffing Algorithm(gpt)
 
 React’s diffing algorithm is based on two key assumptions:
 
