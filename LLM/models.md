@@ -1,3 +1,5 @@
+### LLM Models
+
 | Model                         | Tasks It Excels At                                                                                                                 | Tasks It Struggles With                                                                                                                       | Context Window (max tokens)          |
 | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
 | **OpenAI GPT‑4**              | • Complex reasoning & problem solving<br>• Advanced code generation & debugging<br>• Creative writing<br>• Long-form summarization | • Real‑time knowledge (post‑cutoff) without retrieval plug‑in<br>• Very large docs beyond 32k<br>• Audio/video inputs (unless multimodal API) | 8 192 (standard) / 32 768 (extended) |
