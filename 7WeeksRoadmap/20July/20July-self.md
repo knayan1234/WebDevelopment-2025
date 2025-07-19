@@ -13,7 +13,7 @@ Imagine you have a backpack (function) and you pack it with some snacks (variabl
 - Instead of losing access to the outer function’s variables after the outer function finishes, the inner function maintains a private connection—a closure.
 - This connection is _not_ a copy, but a reference to the original variables.
 
-### **Simple Example:**
+### Simple Example:
 
 ```js
 function outer() {
