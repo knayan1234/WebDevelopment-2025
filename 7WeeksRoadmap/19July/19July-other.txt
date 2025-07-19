@@ -1,0 +1,54 @@
+In previous versions of React, the reconciliation algorithm, also known as “diffing” or “tree diffing,” compared the previous and current virtual DOM trees
+to identify differences and update the affected components accordingly
+React Reconciliation is the process by which React determines the changes made to the virtual DOM and applies those changes efficiently to the actual DOM.
+reconciliation is the process by which React updates the DOM to match the state of the virtual DOM.
+This reconciliation process typically involves:
+
+1 . Creating a virtual DOM — which is a lightweight in-memory representation of the actual DOM.
+
+2 . Comparing the updated virtual DOM with the previous version to detect changes (this is where diffing comes in).
+
+3 . Updating only the parts of the real DOM that have changed.
+
+Diffing is the algorithm React uses during reconciliation to determine the differences between the old and new virtual DOM. 
+The goal of the diffing process is to minimize the number of operations needed to update the real DOM.
+through diffing React compares the old and new Virtual DOM trees to determine the differences.Instead of re-rendering the entire UI, React updates only the changed nodes.
+
+strategies for optimizing reactjs reconciliation
+1. shouldComponentUpdate - class based component - allows us to prevent re-renders if the component’s state or props haven’t changed.
+2. React.memo -  functional component- higher-order component for functional components that prevents re-renders if the props haven't changed
+3. Use key Prop Efficiently in Lists - helps React efficiently track and update individual elements without reordering or re-rendering the entire list.
+4. Avoid Inline Functions and Objects in JSX- Inline functions and objects in JSX create a new instance on every render, which can cause unnecessary re-renders. 
+   Instead, define functions and objects outside of the render cycle or use useCallback to memoize them.
+5. React.PureComponent - base class for class components that implements shallow comparison of props and state to prevent unnecessary re-renders.
+
+Benefits of Reconciliation
+Improved Performance, Efficient Rendering, Predictable UI Updates
+
+Map
+To render a list of items inside an array, we will loop that array with the map() method, and react required the key property for each list to help react differentiate each item
+from the sibling, and identify the item that is changed, updated, or removed.
+We don’t recommend using indexes for keys if the order of items may change. This can negatively impact performance and may cause issues with component state
+React uses keys to identify which items in a list have changed, been added, or removed. This helps React apply efficient updates to the DOM.When a key changes, React assumes
+it’s a different element and may unmount and remount components unnecessarily. This is where using index can backfire.
+The best approach is to use a stable and unique ID for each item — ideally something that comes from your backend or database.
+
+.map() works on arrays, not plain objects.
+
+in plain object we need to Object.keys(),Object.values(),Object.entries()
+
+
+with unique id
+      
+	   {items.map((item)=>(
+            <li key={item.id}>{item.name}</li>
+        )
+       )}
+		
+with index
+
+        {items.map((names,index)=>(
+            <li key={index}>{names}</li>
+          )
+		}
+		
