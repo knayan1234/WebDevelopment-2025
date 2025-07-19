@@ -1,0 +1,90 @@
+use of useEffect including handling stale closures and debounce
+
+Scope defines the visibility of variables.A variable that’s declared in a scope won’t be accessible to another scope.Also any variable that is declared in an outer scope 
+is accessible inside the inner scope.in JavaScript, the scoping mechanism is named lexical scoping. Closures are functions that have access to their lexical scope even
+when executed outside it.closure is a function that remembers the variables from the place where it was defined, regardless of where it is executed later.
+
+stale closure is simply a function that captures variables that have outdated values.
+function outer() {
+  let count = 0;
+  return function inner() {
+    console.log(count); // closure retains the value of count
+  };
+}
+
+state variable is captured at the time of creation. Even if the user types more later, that function only remembers the old value.This is what we call stale state, when a function
+uses old state because it’s running later, but still sees earlier data.
+
+Closures are powerful but they can cause a function to "remember" stale values and that’s the root of stale closures.
+
+useEffect(() => {
+  const interval = setInterval(() => {
+    console.log(`Count is: ${count}`);
+  }, 1000);
+
+  return () => clearInterval(interval); // clean-up
+}, []); // ⛔ stale closure here
+
+ 
+ this will make count as stale closure because console log will work with same count value in every interval without checking did count changed or not .Empty dependancy array so
+ useEffect will run only once during mounting and same count value will use through out 
+ this can be solved by adding a dependancy array with count
+ 
+ useEffect(() => {
+  const interval = setInterval(() => {
+    console.log(`Count is: ${count}`);
+  }, 1000);
+
+  return () => clearInterval(interval); // ✅ clean-up
+}, [count]); // ✅ latest count always captured
+
+With the right dependencies, useEffect() updates the closure as soon as count changes.Proper management of hooks dependencies is an efficient way to solve the stale closure problem.
+ 
+another solution is to use useRef instead of useEffect based on requirements 
+
+const countRef = useRef(count);
+useEffect(() => {
+  countRef.current = count; // always latest count
+}, [count]);
+
+useEffect(() => {
+  const interval = setInterval(() => {
+    console.log(`Count is: ${countRef.current}`); // always latest
+  }, 1000);
+
+  return () => clearInterval(interval);
+}, []);
+
+
+
+
+Debouncing is a technique used to ensure that a function is not called too frequently. It delays the execution of the function until a specified amount of time has passed since
+it was last invoked. This is particularly useful for handling events that can fire rapidly, such as keystrokes in a search input. For instance, if a user is typing in a search bar,
+you might want to wait until they stop typing before making an API call to fetch search results.
+
+Using debouncing in input-heavy components keeps them efficient and responsive without making too many API calls or expensive operations.
+
+
+const [query, setQuery] = useState("");           // User-typed search input
+const [debouncedQuery, setDebouncedQuery] = useState(query); // Debounced value
+
+// Update debouncedQuery only after user stops typing for 500ms
+useEffect(() => {
+  const handler = setTimeout(() => {
+    setDebouncedQuery(query);
+  }, 500);
+
+  // Cleanup timeout if query changes within 500ms
+  return () => {
+    clearTimeout(handler);
+  };
+}, [query]);
+
+// Use debouncedQuery for API call
+useEffect(() => {
+  if (debouncedQuery) {
+    console.log("API call with:", debouncedQuery);
+    // simulate or trigger API call here
+  }
+}, [debouncedQuery]);
+
