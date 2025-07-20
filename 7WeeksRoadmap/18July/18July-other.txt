@@ -1,0 +1,36 @@
+useEffect 
+
+react hooks used to handle side-effects
+
+
+useEffect(()=>
+         {
+		 //code to execute
+		 //the code here executes based on the dependancy array
+		 //if [] is missing then will execute on every render
+		 //if [] empty brackets given then will execute only while mount
+		 //if [dependency] have some dependancy then will execute when the dependancy values changes
+		 
+		 return ()=>{
+		   //code to execute on unmounting(one final time after your component is removed from the page)
+         },
+		 []);=>[] dependencies need to include inside this square brackets
+
+
+
+useEffect is mainly used for fetching data from API,setting up event listeners,Manipulating DOM directly ,cleaning up resources when component unmount
+
+if useEffect looks liek this
+
+  useEffect(()=>{
+        const btn=btnRef.current;
+        function handleClick(){
+            alert("clicked");
+        }
+        btn.addEventListener("click",handleClick)
+        return ()=>{
+            btn.removeEventListener("click",handleClick)
+        }
+    },[])
+	
+	it will alert clicked when we click on button but the return statement is for unmounting and while unmounting its removing the eventlistener so alert will not pop up
