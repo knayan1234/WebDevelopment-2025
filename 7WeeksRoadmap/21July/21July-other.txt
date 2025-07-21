@@ -1,0 +1,48 @@
+Fetch - used to call and fetch data from API
+
+
+case 1 -if user want to do an automatic fetch then useEffect is recommended
+
+    useEffect( ()=>{
+	  async function fetchData() {
+        try {
+        const response=await fetch(`http://www.omdbapi.com/?t=${Typedname}&apikey={apikey}`);
+        const data=await response.json();
+          ...
+        } catch (err) {
+            // Handle error
+        }
+		}
+
+        if(loading)
+        {
+        fetchData(); 
+        }
+    },[loading,Typedname]);
+	
+	
+	here once user type name on text field ,Typedname state variable and loading will set through onChange and due to that dependancy changes automatic fetch will happen 
+	
+	
+case 2 - on Button click
+await fetch(`http://www.omdbapi.com/?t=${name}&apikey={apikey}`)
+        .then(res=>res.json())
+        .then(data=>console.log(data))
+        .catch(err=>console.log(err));   
+		
+this is the older version of using fetch on button click . This version released on ES6 2015 but this will make code complexity high and code readability low . still this format 
+is valid but mostly using in older codes (legacy) and when trying for testing purpose where readability is not an issue
+
+
+the recommended method on button click is using try catch block and async-await
+
+      try{
+            const response=await fetch(`http://www.omdbapi.com/?t=${name}&apikey={apikey}`);
+            const data=await response.json();
+        }
+        catch(err){
+            setError(true);
+        }
+		
+because its less complex and its readability is high also its easy to debug and manage
+ 
