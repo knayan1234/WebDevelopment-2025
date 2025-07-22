@@ -1,0 +1,62 @@
+useCallback
+
+useCallback(fn, dependencies)
+
+fn-The function value that you want to cache
+
+useCallback is a React Hook used to memoize a function, preventing its recreation on every re-render unless its dependencies change.
+it is used to memoize functions so they’re not redefined on every render, useful when passing functions to child components or using them as dependencies
+
+const memoizedFn = useCallback(() => {
+  // function logic
+}, [dependencies]);
+
+
+This improves performance by avoiding unnecessary renders, especially when passing functions to child components or using them inside useEffect.
+  
+On the initial render, useCallback returns the fn function you have passed.
+
+During subsequent renders, it will either return an already stored fn  function from the last render (if the dependencies haven’t changed),
+or return the fn function you have passed during this render.
+
+The useCallback and useMemo Hooks are similar. The main difference is that useMemo returns a memoized value and useCallback returns a memoized function
+
+suppose we have a parent component that passes a function down to a child component as a prop. Without useCallback, the function would get recreated every time
+the parent component re-renders, causing unnecessary re-renders of the child component.
+
+function ParentComponent() {
+  const [count, setCount] = useState(0);
+const handleClick = () => {
+    setCount(count + 1);
+  };
+  return <ChildComponent handleClick={handleClick} />;
+}
+function ChildComponent({ handleClick }) {
+  // do something with handleClick
+}
+
+Without useCallback, handleClick would be a new reference on each render, potentially causing unnecessary re-renders of ChildComponent.
+
+By using useCallback, you can ensure that the handleClick function is only created once and the cached version is used on subsequent renders.
+Using useCallback ensures that handleClick maintains the same reference across renders (unless its dependencies change), helping memoized children avoid unnecessary re-renders.
+
+function ParentComponent() {
+  const [count, setCount] = useState(0);
+const handleClick = useCallback(() => {
+    setCount(count + 1);
+  }, [count]);
+  return <ChildComponent handleClick={handleClick} />;
+}
+function ChildComponent({ handleClick }) {
+  // do something with handleClick
+}
+
+when should we use useCallback
+1. Passing functions to memoized child components (e.g., wrapped with React.memo)
+2. Using a function as a dependency in useEffect or useMemo
+3. Avoiding re-creation of expensive functions
+4. Preventing re-render loops when working with custom hooks
+
+
+useRef is used to store a mutable reference (like DOM nodes or values that persist across renders) without triggering re-renders, 
+while useCallback is used to memoize a function so it doesn't get recreated unnecessarily on every render.
