@@ -1,0 +1,91 @@
+useMemo + React.memo
+
+React.memo
+React.memo() is a higher-order component (HOC) provided by React that memoizes functional components. It means that it caches the result of the component's 
+rendering based on its props, and re-renders only when the props have changed.
+
+
+const MemoizedComponent = React.memo(FunctionalComponent);
+By avoiding unnecessary re-renders, React.memo() contributes to improved performance in React applications
+
+const MyComponent = React.memo((props) => {
+    console.log('Rendering MyComponent');
+    return (
+        <div>
+            <h1>Hello, {props.name}!</h1>
+            <p>{props.message}</p>
+        </div>
+    );
+});
+
+
+
+useMemo
+React Hook used to memoize the result of expensive computations within functional components.
+It memorizes the value returned by a provided function and re-calculates it only when the dependencies change
+
+const memoizedValue = useMemo(() => computeExpensiveValue(dep1, dep2), [dep1, dep2]);
+
+ const computeExpensiveValue = (num) => {
+        console.log("Computing...");
+        let result = 0;
+        for (let i = 0; i < 1000000000; i++) {
+            result += num;
+        }
+        return result;
+    };
+
+    // Using useMemo to memoize the result based on count
+const result = useMemo(
+        () =>
+            computeExpensiveValue(count), [count]
+    );
+	
+React.useMemo => Memoizes functional components , Dependancy on Props, HOC wrapping, return Memoized component,Memoizing functional components based on props
+useMemo=> Memoizes the result of expensive computations , Custom dependencies array,Hook invocation, return Memoized value, Memoizing expensive computations
+
+
+
+IMPORTANT
+comparison between useMemo , useCallback , react.memo
+
+Normally React components get re-rendered based on three major factors.
+
+Change of props
+Change of state
+Re-rendering the parent component
+
+mainly because of the third condition if a value only consumed by the parent is changed, then the parent gets re-rendered according to the new value and 
+it will cause all the child components to re-render although they do not have any change. This becomes a huge overhead when the component structure is deeply nested and complicated.
+
+
+
+To overcome this issue React has three memoization mechanisms built in to optimize the rendering of the components.
+
+React.memo
+useCallback
+useMemo
+
+
+React.memo
+lets you skip re-rendering a component when its props are unchanged.
+
+“React.memo” is a built-in function that will take a component as an argument memorize its props and return the new memorized component. 
+so that the component will re-render only if the incoming props are changed.
+
+useCallback
+useCallback is a React Hook that lets you cache a function definition between re-renders.
+
+mainly in parent component we use useCallback to memoize function definiton and in child component which take that function as prop ,we use React.memo 
+
+
+useMemo
+useMemo is a React Hook that lets you cache the result of a calculation between re-renders.
+
+Now this resource-heavy operation function executes only when the dependency array (“arr”) is changed.
+
+
+
+But we should not memoize everytime . It seems like memorizing every possible scenario in the application will make it better optimized and faster but its not
+Especially if there are small components like buttons, icons, titles, or very lightweight components that don't have any large calculations as internal logic or API calls involved 
+it's better to let those components re-render than memorizing them
