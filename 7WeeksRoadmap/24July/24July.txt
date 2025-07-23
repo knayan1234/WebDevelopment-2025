@@ -1,0 +1,102 @@
+React Hook Form and Formik
+React Hook Form is a library for managing forms in React and React frameworks like Next and Gatsby. React Hook Form is a free, open-source library. 
+can install React Hook Form from the NPM package registry like any other package before using it.
+# npm
+npm install react-hook-form
+
+# yarn
+yarn add react-hook-formReact Hook Form (RHF) is a performant and easy-to-use library that embraces the power of React hooks. It employs a subscription-based model
+to manage form state, which makes it efficient and quick. Here are some of the core features:Minimal Re-Renders,Built-in Validation,Flexibility
+
+
+Eg:
+The primary entry point is the useForm hook, which returns utility methods for managing form state.
+
+import { useForm } from 'react-hook-form';
+
+const myApp = () => {
+  const { register, handleSubmit } = useForm();
+  //...any other stuff.
+  
+  const submitHandler = (data) => console.log(data);
+  return (
+    <form onSubmit={handleSubmit(submitHandler)}>
+      <input  {...register("username", { required: true, minLength: 4 })} />
+      <input {...register("password", { required: true, minLength: 10 })} />
+	  <input
+        id="email"
+        type="email"
+        {...register('email', { required: 'Email is required', pattern: { value: /^\S+@\S+$/i, message: 'Invalid email' } })}
+      />
+      <input type="submit" />
+    </form>
+  )
+}
+register:function that returns an object with a ref property that is used to bind the input to the form state and apply validation rules. It takes a unique input name string as the first argument and an optional object as the second.
+ You can use the second argument to add input validation fields like the example
+
+handleSubmit:takes a callback function that is called when the form is submitted and fully valid. It provides the callback with information 
+on the form values, the form state, and other useful information.
+
+
+Formik
+
+npm install formik
+# or
+yarn add formik
+
+
+Formik is another widely used library for building forms in React. It simplifies form management by handling form state, validation, and submission through a straightforward API. 
+Key features include:
+Formik Props: Uses a single object to manage form state, validation, and submission.
+Integration with Yup: Designed to work seamlessly with validation libraries like Yup for schema validation.
+Field-Level Validation: Allows for validation at the field level, giving developers granular control.
+
+Formik is a well-established and feature-rich form management library for React. It’s designed to provide a lot of functionality out-of-the-box, including built-in validation,
+ error handling, and complex field management.
+ 
+ 
+React Hook Form uses uncontrolled components whereas Formik offers a straightforward API for handling controlled component
+Performance	- RHF :High performance, minimal re-renders, especially for large forms / Formik	:Moderate performance, with more frequent re-renders on complex forms
+Built-in Validation	- RHF: No built-in schema validation; works with any validation library (e.g., Yup)	/ Formik: Built-in validation with support for Yup schema-based validation
+Use Case - RHF: Best for forms with large amounts of dynamic fields, good for performance-sensitive projects 
+           Formik: Best for forms with complex validation, field arrays, or nested fields
+		   
+Formik is a little older than RHF, and it has a different approach to form management. Instead of "registering" components by handling their refs under the hood,
+ Formik uses a controlled component approach. The primary entrypoint for this library is a Formik component, which you wrap around the form components you want to manage.. 
+ This is a higher order component that provides an object composed of form state and utility methods to manage that state
+ 
+ 
+ 
+ import { Form, Formik, Field } from "formik";
+
+export function LoginForm() {
+  return (
+    <>
+      <h1>Login form</h1>
+      <Formik
+        initialValues={{ userName: "", password: "" }}
+        onSubmit={(values) => console.log("values ", values)}
+      >
+        <Form>
+          <p>
+            <label htmlFor="username">Username</label>
+            <Field id="username" required type="text" name="userName" />
+          </p>
+          <p>
+            <label htmlFor="password">Password</label>
+            <Field id="password" required type="password" name="password" />
+          </p>
+          <button type="submit">Login</button>
+        </Form>
+      </Formik>
+    </>
+  );
+}
+
+The Formik component is one of the built-in components you use when building forms with Formik. It internally uses render props. 
+Therefore, you can pass a render prop to the Formik component or use it to wrap a child component
+Form is another built-in component that wraps the HTML form element. Internally, it has access to the onSubmit prop and several other props you pass to Formik.
+Field is a built-in component for adding input elements to your form
+Formik leaves form validation to you. You can do it yourself or use a third-party library like Yup.
+
