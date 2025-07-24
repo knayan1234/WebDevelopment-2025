@@ -1,4 +1,4 @@
-const Card = () => {
+const Card = ({ cardData }) => {
   return (
     <div
       style={{
@@ -12,24 +12,9 @@ const Card = () => {
         alignItems: "center",
       }}
     >
-      <h3>Name</h3>
-      <p>Position</p>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          marginTop: "8%",
-        }}
-      >
-        <div>Icon</div>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
-          unde quod? Ab cum laudantium quibusdam quisquam assumenda neque
-          repudiandae eligendi?
-        </p>
-        <div>Icon</div>
-      </div>
+      <h3>{cardData.name}</h3>
+      <p>{cardData.job}</p>
+      <p>{cardData.text}</p>
     </div>
   );
 };
