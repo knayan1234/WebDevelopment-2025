@@ -187,7 +187,7 @@ In JavaScript, a **prototype** is the underlying mechanism that enables objects 
 
 Every object in JavaScript has an internal, hidden property called `[[Prototype]]` which is a link to another object. That other object is its prototype.
 
-# The Prototype Chain
+### The Prototype Chain
 
 When you try to access a property on an object, the JavaScript engine performs the following steps:
 
@@ -197,7 +197,7 @@ When you try to access a property on an object, the JavaScript engine performs t
 4.  This sequence of linked objects is called the **prototype chain**.
 5.  The chain ends when it reaches a prototype that is `null`. If the property isn't found anywhere in the chain, JavaScript returns `undefined`.
 
-# A Simple Analogy
+### A Simple Analogy
 
 Imagine you are looking for a book.
 
@@ -206,7 +206,7 @@ Imagine you are looking for a book.
 3.  If your friend doesn't have it, you go to the public library (the prototype's prototype, which is `Object.prototype`).
 4.  If the library doesn't have it, your search ends (the chain ends at `null`), and you conclude the book is not available (`undefined`).
 
-# Why is This Useful?
+### Why is This Useful?
 
 Prototypes are the foundation of **inheritance** in JavaScript. Instead of copying methods into every single object instance, you can define a method once on a shared prototype. All objects that link to that prototype can then access and use that method, which is highly efficient for memory .
 
