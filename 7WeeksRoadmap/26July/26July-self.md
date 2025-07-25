@@ -13,6 +13,7 @@ The way to communicate between componets via url without refreshing the UI. SPA.
 ## Browser routing
 
 Instead of anchor tags, we use the Link component for internal navigation as a tag can refrsh the whole UI
+Navlink as it gives one active class for styling.
 
 ## Important hooks
 
