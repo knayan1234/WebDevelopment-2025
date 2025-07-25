@@ -1,0 +1,143 @@
+React router
+
+routing is the ability to navigate to different pages by either entering URL or clicking on  elements
+A routing library for React that enables navigation between views without full page reloads.
+react don't have inbuild router so to achieve it react uses react-router-dom
+
+npm install react-router-dom
+
+
+there are 3 types of routers: Browse Router - common one - allow URL to be dynamically updated, Hash Router- uses URL hash(#) for routing, Memory Router - mainly used in React native
+
+ 
+
+to enable routing we should wrap our components with browser router . Only those which is wrapped have the ability to route
+import { BrowserRouter as Router, Route } from "react-router-dom";
+
+export default function App() {
+  return (
+   <Router>
+    <main>
+      <nav>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </nav>
+
+    <Route path="/" component={Home} />
+    </main>
+</Router>
+  );
+}
+
+
+
+
+or
+ <li><Link to="/about">About</Link></li>
+also works
+but a tag causes a full page reload, while Link uses client-side routing
+
+
+Routes: A container for all your route definitions.
+Route: Defines a single route with a path and the component to render.
+
+<Routes>
+    <Route path="/" element={<Home />} />
+    <Route path="/about" element={<About />} />
+</Routes>
+
+Link: Creates navigational links in your application.
+NavLink: Similar to Link but provides additional styling attributes when the link is active.
+
+<nav>
+   <NavLink to="/" className={({ isActive }) => isActive ? 'active' : ''}>Home</NavLink>
+    <Link to="/about">About</Link>
+</nav>
+
+
+
+The reason for using <Routes> is because it's job is to understand all of its children Route elements, and intelligently choose which ones are the best to render.
+
+React Router comes with a useParams Hook that returns an object with a mapping between the URL parameter(s) and its value.
+
+import { useParams } from 'react-router-dom'
+ const { topicId } = useParams()
+
+Nested Routes allow the parent Route to act as a wrapper and control the rendering of a child Route.
+
+
+1. if we want parent route in control of child
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/messages/*" element={<Messages />} />
+      <Route path="/settings" element={<Settings />} />
+    </Routes>
+  );
+}
+
+function Messages() {
+  return (
+    <Container>
+      <Conversations />
+
+      <Routes>
+        <Route path=":id" element={<Chat />} />
+      </Routes>
+    </Container>
+  );
+}
+
+ By appending a /* to the end of our /messages path, we're essentially telling React Router that Messages has a nested Routes component and our parent path should match for /messages as well as any other location that matches the /messages/* pattern
+
+2.if we wanted our App component to contain all the information it needed to create our nested routes rather than having to do it inside of Messages
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/messages" element={<Messages />}>
+        <Route path=":id" element={<Chats />} />
+      </Route>
+      <Route path="/settings" element={<Settings />} />
+    </Routes>
+  );
+}
+
+
+to tell React Router where in the parent Route (Messages) should it render the child Route (Chats).
+
+import { Outlet } from "react-router-dom";
+
+function Messages() {
+  return (
+    <Container>
+      <Conversations />
+
+      <Outlet />
+    </Container>
+  );
+}
+
+
+Outlet is a placeholder used in a parent component to render the matched child route.
+
+If the app's location matches the nested Route's path, this Outlet component will render the Route's element. So based on our Routes above, if we were at /messages, the Outlet component would render null, but if we were at /messages/1, it would render the <Chats /> component.
+
+
+useParams
+
+Returns an object of key/value-pairs of the dynamic params from the current URL that were matched by the routes. 
+
+if route pattern like /posts/:postId is matched by /posts/123 then params.postId will be "123".
+
+import { useParams } from "react-router";
+
+function SomeComponent() {
+  let params = useParams();
+  params.postId;
+}

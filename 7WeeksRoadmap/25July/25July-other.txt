@@ -1,0 +1,40 @@
+A custom hook is a JavaScript function that starts with use and internally calls other hooks like useState, useEffect, or useContext. It allows developers to extract reusable logic,
+keeping components clean and modular.
+function useCustomHook() {
+    // Use built-in hooks here
+    return someValue;
+}
+
+React has many built-in hooks, but sometimes we need custom logic that isn't covered by them—like tracking if a user is online or connecting to a chat room. That's where custom hooks become useful. 
+
+sometimes we need to implemenet same logic in different component , there it become duplication of code . custom hook becomes useful in such situations . 
+
+like component name starts with capital letter , hook name should start with use
+The code inside your custom Hooks will re-run during every re-render of your component. This is why, like components, custom Hooks need to be pure. 
+
+main idea behind custom hook is making component more reusable and reducing duplicate code
+
+Rules of hook
+1.Only Call Hooks at the Top Level - You should never call hooks inside loops, conditions, or nested functions. Always call them at the top level of your React function to ensure they are called in
+   the same order each time the component renders.
+   
+  // This is invalid and will cause an error
+  if (isVisible) {
+    useEffect(() => {
+      console.log('Component is visible.');
+    }, []);
+  }
+  
+2.Only Call Hooks from React Functions - Hooks can only be called from function components or custom hooks. You cannot use them in regular JavaScript functions, class components, or any other context.
+ This restriction ensures that React can manage the lifecycle and state of the function components effectively.
+ 
+3. If you create a custom hook, it must adhere to the same rules as regular hooks. This means that your custom hooks should also be called only at the top level and must be invoked from functional components. 
+4.Calling Hooks Inside Event Handlers is not correct
+
+function MyComponent() {
+  const handleClick = () => {
+    const [count, setCount] = useState(0); // ❌ Don't call hooks inside event handlers
+  };
+
+  return <button onClick={handleClick}>Click Me</button>;
+}
