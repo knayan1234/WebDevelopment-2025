@@ -8,6 +8,7 @@ The way to communicate between componets via url without refreshing the UI. SPA.
 2. MemoryRouter- Stores history in memory; doesn't sync with URL
 3. StaticRouter- Routes based on a static location, no UI sync
 4. NativeRouter- Custom router for native applications
+5. BrowserRouter-	Modern web apps	Uses HTML5 History API for clean URLs
 
 ## Browser routing
 
