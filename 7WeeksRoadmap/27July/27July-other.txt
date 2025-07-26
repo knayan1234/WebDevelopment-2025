@@ -1,0 +1,26 @@
+
+Route Guards
+
+Security is key in applications . Route guards  allow us to create an authorization part for certain pages which we need to show only if user is authenticated.
+the idea behind this is certain pages with sensitive information we can prevent from visible to everyone unless they are logged in. Once they are logged in they are authorized and can view
+the screen
+
+
+lazy loading is a technique in web development that allows you to load components only when they are needed, rather than loading everything upfront. This is especially useful in large applications where loading all components at once could slow down the initial page load. Same goes with React's built-in React.lazy and Suspense for implementing lazy loading of routes
+
+React.lazy allows you to define components that are loaded only when the route is accessed.
+Suspense is used to specify a fallback UI (like a loading spinner) while the component is being loaded.
+
+import React, { Suspense } from 'react';
+...
+const Home = React.lazy(() => import('./Home')); //dynamically imports the component only when it's needed
+...
+const FallbackLoader = () => <div>Loading...</div>;
+...
+
+<Router>
+      <Suspense fallback={<FallbackLoader />}> //provide a fallback UI 
+        <Routes>
+          <Route path="/" element={<Home />} />
+
+...
