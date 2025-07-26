@@ -1,5 +1,5 @@
 /**
- * COPIED CODE FROM GPT
+ * ===================================COPIED CODE FROM GPT=============================================
  * A robust function to check if a value is a "plain" object.
  * A plain object is one created via {} or new Object().
  */
