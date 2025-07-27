@@ -23,7 +23,7 @@ const Movies = ({ movieData, searchTerm }) => {
   console.log("searchedMOvie", searchedMovies);
   // Get unique genres from filtered movie list
   const allGenres = Array.from(
-    new Set(searchedMovies.flatMap((movie) => movie.genre))
+    new Set(searchedMovies.map((movie) => movie.genre).flat())
   );
 
   return (
