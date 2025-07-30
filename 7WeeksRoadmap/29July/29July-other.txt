@@ -1,0 +1,52 @@
+Context Provider
+Context is a way to share data between components without explicitly drilling through components props. It's a global state management system within your React application.
+The problem with prop drilling is that, as the application grows in complexity, passing data through multiple levels of components can become messy, cumbersome, and error-prone.
+// Creating a context
+const ThemeContext = React.createContext();
+
+
+//To consume the Context, return the provider with the data you want to share with other components and wrap the children props inside.
+
+ export const ThemeProvider = ({ children }) => {
+     const [isDarkTheme, setIsDarkTheme] = useState(false)
+
+     const toggleTheme = () => setIsDarkTheme(prevTheme => !prevTheme)
+
+     return (
+         <ThemeContext.Provider value={{ isDarkTheme, toggleTheme }}>
+             {children}
+         </ThemeContext.Provider>
+     )
+ }
+
+//To be able to access the data in the Context API, we will have to wrap the portion of our Application with the ThemeProvider for the components to consume the data.
+
+ root.render(
+   <React.StrictMode>
+     <ThemeProvider>
+      <App />
+     </ThemeProvider>
+   </React.StrictMode>
+ );
+
+//now can access it any component
+const { isDarkTheme, toggleThemes } = useContext(ThemeContext);
+
+through this method we can access the value and update the value through the function given in any given component
+
+
+
+situation to avoid context
+1. Dont overuse-Overusing context can lead to performance issues and make state management harder to understand.  Only use context for the global state that truly needs to be accessed 
+   by many components.Use multiple context for different part of UI dont use same API for updating everwhere
+   For unrelated state (e.g., Theme vs Auth), create separate contexts. This avoids unnecessary re-renders and improves modularity.
+
+2.avoid frequent updates - Use local state for frequently changing data. This is because frequent updates to context values can cause all consuming components to re-render, which might                 negatively impact performance.
+
+3. Use Custom Hooks to Encapsulate Logic - Endeavour to create custom hooks to encapsulate the logic for consuming context. This improves code readability and reusability.
+export const useTheme = () => useContext(ThemeContext);
+const { isDarkTheme, toggleTheme } = useTheme(); //in component
+
+
+4. React.memo or useMemo to Optimize Re-renders - If you are passing objects/functions via context, wrap them in useMemo or useCallback to avoid unnecessary re-renders
+

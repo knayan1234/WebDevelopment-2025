@@ -1,0 +1,273 @@
+Redux is an open-source JavaScript library for managing and centralizing application state. It is most commonly used with libraries such as React or Angular for building user interfaces. 
+in Redux, it is advisable to store the application state in a single object managed by the Redux store. 
+f you want to update the state of your Redux (like you do with setState in React) you need to let Redux know about your action. Redux follows a process to change/update the state of your application. This leads to the second principle of Redux " State is read-only"
+To update the state of your application you need to convey your action to the reducer. Now the reducer will take your action.Your Reducer always returns your new state. Sending off the action to the reducer is called dispatching an action. This leads to the last or third principle of Redux.
+
+
+
+to implement redux , first process is keeping all state values in one and only place called store
+
+import { createStore } from "redux"; //an import from the redux library
+const store = createStore(); 
+
+
+when you create a Redux Store you do a similar kind of initial deposit which is known as initialState. We will represent this initialState as a second argument passed into the createStore.
+
+const store = createStore(reducer, initialState);
+
+reducer function is same as useReducer
+
+complete code
+
+import HelloTech from "./HelloTech";
+import { createStore } from "redux";  
+
+const initialState = { tech: "React " };
+const store = createStore(reducer, initialState);
+const dispatch = useDispatch()
+
+function reducer (state, action) {
+    switch (action.type) {
+         case "withdraw_money":
+            //do something
+            break;
+        case "deposit-money":
+             //do something
+            break;
+        default:
+            return state;
+        }  
+}
+
+function dispatchAction(){
+  store.dispatch({
+   type: "SET_TECHNOLOGY",
+   payload: "React"
+ });
+}
+
+
+function App {
+ return (
+ <>
+  <HelloTech tech={store.getState().tech} />
+  <button onClick={dispacthAction}>Change</button>
+ </>
+)
+}
+
+export default App;
+
+
+this is how we need to implement
+
+State is Read-only in Redux. What makes Redux predictable is that to make a change in the state of the application, we need to dispatch an action which describes what changes we want to make in the state.
+
+
+
+
+
+to make the store accessible to all children
+
+<Provider store={store}>
+<App/>
+</Provider>
+
+
+like this just need to wrap
+
+
+
+
+
+why Redux Toolkit
+
+
+Redux Toolkit, or RTK, is a node package that simplifies development by providing utility functions. It is made to simplify the creation of a redux store and provide easy state management. It can be easily installed using simple npm commands.The Redux toolkit is a wrapper around Redux and encapsulates its necessary functions.
+Redux Toolkit was created to solve these three common problems that we face in Redux.
+
+Too much code to configure the store.
+Writing too much boilerplate code to dispatch actions and store the data in the reducer.
+Extra packages like Redux-Thunk and Redux-Saga for doing asynchronous actions.
+
+npm i @reduxjs/toolkit
+npm i react-redux   
+
+
+Benefits of Redux Toolkit (RTK)
+Easier state management as compared to Redux
+Boilerplate code for the majority of functions
+Wrapper functions are provided which reduce lines of code
+
+
+mainly parts
+createSlice: for reducers + actions together
+configureStore: smart store setup
+useSelector: fetch state value from redux store
+useDispatch: call action 
+
+
+first will create a store
+then create slice (initial state,reducer,action)
+wrap <App/>
+use in components where we want
+
+
+store.js
+
+import { configureStore } from '@reduxjs/toolkit';
+import counterReducer from '../features/counter/counterSlice';
+
+export const store = configureStore({
+  reducer: {
+    counter: counterReducer, // name = counter, reducer = counterSlice.reducer
+  },
+});
+
+
+
+Create a Slice (State + Reducers)
+src/features/counter/counterSlice.js
+
+import { createSlice } from '@reduxjs/toolkit';
+
+// Initial state
+const initialState = {
+  value: 0,
+};
+
+// Create slice
+const counterSlice = createSlice({
+  name: 'counter',
+  initialState,
+  reducers: {
+    increment: state => {
+      state.value += 1;
+    },
+    decrement: state => {
+      state.value -= 1;
+    },
+    incrementByAmount: (state, action) => {
+      state.value += action.payload;
+    },
+  },
+});
+
+// Export actions for UI use
+export const { increment, decrement, incrementByAmount } = counterSlice.actions;
+
+// Export reducer for store
+export default counterSlice.reducer;
+
+Wrap the React App with <Provider>
+src/index.js
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+import { Provider } from 'react-redux';
+import { store } from './app/store';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+
+root.render(
+  <Provider store={store}>
+    <App />
+  </Provider>
+);
+
+
+4. Use Redux in Components (dispatch + useSelector)
+ src/features/counter/Counter.js
+
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { increment, decrement, incrementByAmount } from './counterSlice';
+
+const Counter = () => {
+  const count = useSelector(state => state.counter.value); // Access value from store
+  const dispatch = useDispatch(); // To call actions
+
+  return (
+    <div>
+      <h2>Count: {count}</h2>
+      <button onClick={() => dispatch(increment())}>+1</button>
+      <button onClick={() => dispatch(decrement())}>-1</button>
+      <button onClick={() => dispatch(incrementByAmount(5))}>+5</button>
+    </div>
+  );
+};
+
+export default Counter;
+
+5. Render the Component
+ src/App.js
+
+import React from 'react';
+import Counter from './features/counter/Counter';
+
+const App = () => {
+  return (
+    <div>
+      <h1>Redux Toolkit Counter App</h1>
+      <Counter />
+    </div>
+  );
+};
+
+export default App;
+
+
+
+Zustand
+
+
+Zustand is a small yet powerful state management library designed for React and next applications. It provides a simple and flexible API to manage global state without the complexity of larger libraries like Redux.
+npm install zustand
+
+Step 1: Create a Store
+
+First, create a store using Zustand's create function. This store will hold your state and actions.
+
+import create from 'zustand';
+
+// Create a store
+const useStore = create((set) => ({
+  count: 0,
+  increment: () => set((state) => ({ count: state.count + 1 })),
+  decrement: () => set((state) => ({ count: state.count - 1 })),
+ incrementBy: (value) => set(state => ({ count: state.count + value })),
+}));
+
+Step 2: Bind the Component to the Store
+
+Next, connect your component to the store using the useStore hook. This allows the component to access and update the state.
+
+
+function Counter() {
+  // Bind the component to the store
+  const { count, increment, decrement,incrementBy  } = useStore();
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={increment}>Increment</button>
+      <button onClick={decrement}>Decrement</button>
+  <button onClick={() => incrementBy(5)}>+5</button>
+    </div>
+  );
+}
+
+
+export default Counter;
+
+
+
+Zutand preer over RTK
+
+ want a simple shared state solution without boilerplate.
+
+ app is small to medium (e.g., a dashboard, blog, portfolio, SPA).
+
+ prefer direct access (count++) instead of dispatching actions.
+
+ don’t need a lot of middleware or strict global state rules.
