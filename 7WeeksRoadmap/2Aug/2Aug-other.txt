@@ -1,0 +1,71 @@
+in FE folder structure is important because of 
+-Maintainability - A clear structure makes it easy to find, update, or delete files without confusion.
+-Scalability - As the app grows, structure prevents chaos. Teams can work independently on features.
+-Team Productivity - New devs onboard faster when structure is predictable and consistent.
+
+
+Feature based design also similar to atomic
+in atomic there atom , modules etc will be there but in feature based Organizes code by feature/domain 
+instead of atom and molecules folders here features , hooks, shared, context etc folders will be there 
+
+
+in big projects instead of importing file from '../../../../context/provider/...." 
+instead of doing a long path we can do aliases
+
+import CartProvider from '@/context/CartProvider';
+
+for this we need to update in config file
+tsconfig.json(TypeScript) , jsconfig.json(JavaScript)
+
+
+{
+  "compilerOptions": {
+    "baseUrl": "src",  // early every location was starting from root since base given as src from now on filepath will start from src not root
+    "paths": {
+      "@features/*": ["features/*"],
+      "@shared/*": ["shared/*"],
+      "@hooks/*": ["hooks/*"],
+      "@contexts/*": ["contexts/*"],
+      "@lib/*": ["lib/*"]
+    }
+  }
+}
+
+
+can import files like this
+import Button from '@shared/components/Button';
+ Project:
+
+├── jsconfig.json          baseUrl = "src"
+├── package.json
+├── public/
+└── src/                   from here location starts while importing
+    ├── App.jsx
+    ├── pages/
+    │   └── HomePage.jsx  ← you are here
+    ├── shared/
+    │   └── components/
+    │       └── Button.jsx
+    ├── hooks/
+    │   └── useAuth.js           ← Custom React hooks
+    │
+    ├── contexts/
+    │   └── AuthContext.jsx      ← React Context for global state
+    │
+    ├── lib/
+    │   └── api.js               ← Axios/fetch setup
+
+
+Atomic design is good for
+ work closely with design systems or Storybook
+ good for static sites, portfolios, marketing pages
+ Your app is not feature-heavy, but UI-complex
+
+Feature Based
+  These have many features, logic, API interactions, and states
+  You need to isolate tests, state, API, UI per feature
+  Team autonomy and fewer merge conflicts
+
+
+
+at situation we can make a hybrid approach as well. hybrid means combination of both

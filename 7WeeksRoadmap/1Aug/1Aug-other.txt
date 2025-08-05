@@ -1,0 +1,24 @@
+Atomic design is a method used in web and app development to create consistent and reusable design components called atoms. Instead of creating a whole website or app all at once, you break it down into smaller pieces, such as buttons, forms, and menus. These smaller pieces are atoms
+These atoms then combine to form 'molecules', 'organisms', 'templates', and 'Pages'
+
+Atoms are the smallest building blocks of a design system. Eg: button,textfield,lables
+Molecules are combinations of atoms that form more complex components. While still simple and self-contained, molecules perform more specific functions. Examples of molecules include search bars, navigation bars, and product listings.
+Organisms are groups of molecules that create more complete sections of a website or application. These are more complex and can include multiple functionalities. Examples of organisms are headers
+Templates provide the skeleton of a website or application. Templates focus on the structure and layout of a page without specific content, demonstrating how different organisms fit together in a cohesive design.
+Pages are the final products of the design process. Pages are specific instances of templates filled with real content. They represent what the user actually sees, showcasing the final product with all design elements and content in place.
+
+
+Benefits
+consistency and efficiency. By using reusable components, designers can spend less time on repetitive tasks and more time on creative aspects.
+Scalability and reusability are major advantages of atomic design. The first stage of atomic design involves creating atoms, which are highly reusable across multiple projects. This saves time and effort in the long run. 
+Atomic design not only ensures a consistent user experience but also improves efficiency and reduces costs.
+
+
+
+In short
+atoms - basic- smallest component - eg button , input, label
+molecule - group of atoms - navbar (combining buttons)
+organism - group of molecule - header
+template and page => page will add very minimal content , may be a heading but that heading will be wrapping by template and that template will combine what we need to show thats organism 
+ and children ( what got from page)
+ so in short page will be final but skeleton through template
