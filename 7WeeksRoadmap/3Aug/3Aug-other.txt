@@ -1,0 +1,132 @@
+Headless UI
+
+A UI library for React that provides accessible components but without the styling — so you can style them however you’d like.
+The libraries will give you well tested and accessible components or hooks without any default styling, so you can style and render them however you’d like, and if the authors were kind enough, you’ll also be able to control their functionality and behavior.
+
+
+Radix UI: Well tested, accessible, and has one of the best component API-s . It does have some problems when testing it’s components with React Testing Library, and does not support IE very well.
+Downshift: By Kent C. Dodds. Focuses on autocomplete, select, combobox, and multi combobox components. Well tested, accessible, and gives you total control over styling and functionality.
+Headless UI: a small number of components. Well tested, work best with Tailwind CSS. Only drawback is that it’s not that easy to change the functionality and behavior of the components.
+
+Headless components give us more control but that comes with the tradeoff of us needing to make more decisions along the way. Since headless components are usually in charge only of accessibility and functionality, we still need to implement the styling and most of the rendering logic ourselves. We will even have to make more UX decisions when using them because they are not very opinionated about that.
+
+UI libraries like MUI, Bootstrap or Ant Design have large communities behind them. You can always find solutions to your problems on their Github issues page, and bug fixes are published on a regular basis. While headless libraries are also backed by strong communities, they’re not as nearly as big or active as the major UI libraries ones.
+
+
+Common Headless UI Components:
+Dropdown menus
+Dialogs (modals)
+Tabs
+Listboxes
+Accordions
+Switches / Toggles
+Comboboxes (autocomplete)
+Popovers
+Menus
+
+You can add your own styles via className using Tailwind, CSS Modules, etc.
+
+normal accordion code . if we write manually
+import React, { useState } from 'react';
+
+function AccordionItem({ index, isOpen, onToggle, title, children }) {
+  return (
+    <div>
+      <button
+        onClick={() => onToggle(index)}
+        aria-expanded={isOpen}
+        aria-controls={`panel-${index}`}
+        id={`accordion-header-${index}`}
+      >
+        {title}
+      </button>
+
+      {isOpen && (
+        <div
+          role="region"
+          id={`panel-${index}`}
+          aria-labelledby={`accordion-header-${index}`}
+        >
+          {children}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function Accordion({ items }) {
+  const [openIndex, setOpenIndex] = useState(null);
+
+  const handleToggle = (index) => {
+    setOpenIndex((prevIndex) => (prevIndex === index ? null : index));
+  };
+
+  return (
+    <div>
+      {items.map((item, i) => (
+        <AccordionItem
+          key={i}
+          index={i}
+          title={item.title}
+          isOpen={openIndex === i}
+          onToggle={handleToggle}
+        >
+          {item.content}
+        </AccordionItem>
+      ))}
+    </div>
+  );
+}
+
+
+export default Accordion;
+
+
+same if we write using headless
+
+import React from 'react';
+import { Disclosure } from '@headlessui/react';
+
+export default function BasicAccordion() {
+  return (
+    <div>
+      <Disclosure>
+        {({ open }) => (
+          <>
+            <Disclosure.Button>
+              What is Headless UI?
+            </Disclosure.Button>
+            <Disclosure.Panel>
+              Headless UI is a library of unstyled accessible UI components.
+            </Disclosure.Panel>
+          </>
+        )}
+      </Disclosure>
+
+      <Disclosure>
+        {({ open }) => (
+          <>
+            <Disclosure.Button>
+              Why use it?
+            </Disclosure.Button>
+            <Disclosure.Panel>
+              It provides logic and accessibility without styling.
+            </Disclosure.Panel>
+          </>
+        )}
+      </Disclosure>
+    </div>
+  );
+}
+
+
+Disclosures are using as wrapper for each value and labels . opening and closing is already managing by headless UI . open is coming automatically , as its habdled in its parent . as a developer we dont need to check how it is implemented but on high level knowledge its handling like a context managing state value
+
+
+similar to this is dropdown also . we need to manually implement if normal and in headless they gave a boiler plate with functionality and behavior
+
+
+inShort headless UI is a library based on the component we ant we can use the available components in it . styling depends on us but behaviour and accessibility is already handled in it
+
+
+in the boiler plate sometimes we just want to add contents to the respective subcomponents inside the main wrapper . sometimes need to manage state internally to render selected values (Listbox) . but still it reduce code length and accessibility part
