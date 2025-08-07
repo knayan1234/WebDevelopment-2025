@@ -199,3 +199,60 @@ export default function App() {
 ```
 
 ### 6,7. RHF and Formik
+
+**React Hook form** is a lightweight form library. It is a hook based library and minimizes re renders.
+
+1. `Register` - Connects your input to the form context.
+   `<input {...register("firstName", { required: true })} />`
+
+2. `handleSubmit` - Handles form submission and runs validations.
+   `<form onSubmit={handleSubmit(onSubmit)} />`
+
+3. `formState.errors` - Tracks validation errors
+   `{errors.email && <p>Email is required</p>}`
+
+```jsx
+import { useForm } from "react-hook-form";
+export default function App() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = (data) => console.log(data);
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <label htmlFor="fname">First Name</label>
+      <input
+        type="text"
+        id="fname"
+        {...register("fnameRequired", { required: true })}
+      />
+      <label htmlFor="lname">Last Name</label>
+      <input type="text" id="lname" {...register("lnameRequired")} />
+      {errors.fnameRequired && <span>This field is required</span>}
+    </form>
+  );
+}
+```
+
+**Formik**
+
+> to do
+
+### 9. Lazy Loadind/Routing
+
+Lazy loading means deferring the loading of certain components until they're actually needed, which can speed up initial page loads and improve user experience
+
+`React.lazy` is a function that lets you dynamically import a component, splitting your code into smaller bundles that load only when required. This is great for large apps where not all components need to load upfront. Without lazy loading, all code loads at once, which can slow things down. With lazy, you reduce the initial bundle size
+`Suspense` is a component that wraps parts of your UI and handles loading states for asynchronous operations, like lazy-loaded components or data fetching
+
+`const Home = lazy(() => import("./components/Home"));`
+`<Suspense fallback={<div>Loading...</div>}>`
+
+> **Dynamic imports and lazy loading are not same. Dynamic imports are the easiest, most effective way to achieve lazy loading in JS and React contexts.** Lazy loading is a technique for deferring resource loads until needed, while dynamic imports are a specific JavaScript feature (the import() syntax) for loading modules asynchronously.
+
+**Lazy loading** without dynamic import is possible as dyanamic import is the example/usecase of lazy loading in react and javascript.
+one example : `<img src="cat.jpg" alt="A cat" loading="lazy" width="300" height="200">`
