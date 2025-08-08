@@ -12,3 +12,4 @@
 12. Diffing Algorithm
 13. Ways of React app creation
 14. forwardRef
+15. Why functions are objects in JS and object and non object in JS
