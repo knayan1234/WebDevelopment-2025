@@ -68,6 +68,8 @@ An **opinionated code formatter** for JavaScript, TypeScript, JSON, HTML, CSS, M
 
 .prettierrc
 
+
+
 ```jsx
 {
   "semi": true,    //"semi": true → Add ; at the end of statements.
