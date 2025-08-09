@@ -1,0 +1,52 @@
+Web accessibility means that websites, tools, and technologies are designed and developed so that people with disabilities can use them
+accessible design improves overall user experience and satisfaction, especially in a variety of situations, across different devices, and for older users. Accessibility can enhance your brand, drive innovation, and extend your market reach.
+A great deal of web content can be made accessible just by making sure that the correct HTML elements are used for the correct purpose at all times
+some of the methods to implement accessibility are
+1.Captions and other alternatives for multimedia-People who cannot hear audio or see video need alternatives
+2.Content can be presented in different ways-Headings, lists, tables, input fields, and content structures are marked-up properly
+Web Accessibility (a11y) means making websites usable by everyone, including people with disabilities such as visual, auditory, motor, or cognitive.
+use Semantic HTML means Use correct tags:
+<button>Submit</button> <!-- ✅ instead of <div onclick="..."> -->
+<nav>, <main>, <header>, <footer>, <section>, <article>
+Keyboard Navigation Ensure all interactive elements are reachable via Tab.
+Use role, aria-* attributes when needed.
+Avoid div or span as interactive elements without tabIndex and event handlers.
+Focus Management - Use autoFocus, focus() appropriately.
+Show clear focus indicators (:focus-visible).
+ARIA roles can be used to define the purpose of an element to assistive tech, like role="button", role="dialog".
+aria-label="Submit" gives a label directly.
+aria-labelledby="label-id" points to an existing element’s ID as label.
+Semantic HTML give meaning to screen readers and assistive technologies.
+A <nav> tells screen readers it’s a navigation section.
+Semantic elements provide default behaviors like keyboard accessibility, styling, etc.
+Aria role + focus traps
+ARIA = Accessible Rich Internet Applications
+ARIA roles are attributes that help assistive technologies (like screen readers) understand the purpose or behavior of custom elements that are not natively accessible.
+role="dialog"	Declares a modal dialog
+A focus trap is a technique used to keep the user's keyboard focus inside a specific element, usually a modal, drawer, or popup, until it’s dismissed.
+Libraries like Radix UI, Headless UI, MUI, or ShadCN include built-in focus traps in modal/dialog components.
+You can also use npm packages like focus-trap-react
+focus trap is nothing but when a model is open control should not go out of it
+mainly its handled by checked which button user is pressing . if user pressing tab and last element came check it in condition and change focus to first element similarly if shift+tab is pressing . which is moving backward and currently focus in first element then conditionally change the focus to last element .
+const focusableElements = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+const modal = document.querySelector('#modal');
+const firstEl = modal.querySelectorAll(focusableElements)[0];
+const focusableContent = modal.querySelectorAll(focusableElements);
+const lastEl = focusableContent[focusableContent.length - 1];
+
+document.addEventListener('keydown', function(e) {
+let isTabPressed = (e.key === 'Tab' || e.keyCode === 9);
+if (!isTabPressed) return;
+
+if (e.shiftKey) { // Shift + Tab
+if (document.activeElement === firstEl) {
+lastEl.focus();
+e.preventDefault();
+}
+} else { // Tab
+if (document.activeElement === lastEl) {
+firstEl.focus();
+e.preventDefault();
+}
+}
+});
