@@ -1,0 +1,99 @@
+ESLint is **a widely used, open-source JavaScript linter that Improve code readability and maintainability, Enforce coding standards, Prevent bugs and runtime errors**
+
+**helps developers identify and fix problematic patterns in their code. Static code analysis tool (it checks your code without actually running it).**
+
+- Reads your code.
+- Applies **rules** from:
+    - ESLint core
+    - Plugins (e.g., `eslint-plugin-react`)
+    - Your custom settings
+- Reports problems or auto-fixes them.
+
+“ error  'x' is assigned a value but never used  no-unused-vars”
+
+```jsx
+{
+  "scripts": {
+    "lint": "eslint ."
+  }
+}
+
+if in package.json we add this , we can call
+
+npm run lint to verify before commiting code
+```
+
+The `.eslintrc.json` file is **ESLint’s configuration file** — it’s where you tell ESLint:
+
+- **What environment your code runs in** (browser, Node.js, etc.)
+- **Which linting rules to apply** (strict, loose, custom)
+- **Which plugins or presets to use** (React, TypeScript, Prettier, etc.)
+- **How to parse your code** (ES6, JSX, TS)
+
+```jsx
+{
+  "env": {
+    "browser": true,   // window, document available
+    "node": true,      // require, module.exports available
+    "es2021": true     // ES2021 globals like BigInt
+  },
+ "extends": [
+  "eslint:recommended",       // ESLint's recommended rules
+  "plugin:react/recommended", // React-specific rules
+  "prettier"                  // Disable formatting rules (use Prettier)
+],
+ "parserOptions": {
+  "ecmaVersion": "latest",    // Allow newest JS syntax
+  "sourceType": "module",     // Support import/export
+  "ecmaFeatures": {
+    "jsx": true               // Enable JSX parsing
+  }
+},
+ "rules": {
+  "no-unused-vars": "warn",   // Warn instead of error
+  "no-console": "off",        // Allow console.log
+  "eqeqeq": ["error", "always"] // Force === instead of ==
+}
+}
+
+```
+
+ ESLint checks **quality & potential errors**, Prettier enforces **consistent formatting** automatically.
+An **opinionated code formatter** for JavaScript, TypeScript, JSON, HTML, CSS, Markdown, etc.
+
+- Saves time — no need to manually fix formatting.
+- Consistent style across the whole project.
+- Works with VS Code, WebStorm, Sublime, etc.
+- Integrates with ESLint to fix style issues on save.
+
+.prettierrc
+
+
+
+```jsx
+{
+  "semi": true,    //"semi": true → Add ; at the end of statements.
+  "singleQuote": true,//"singleQuote": true → Use ' instead of ".
+  "tabWidth": 2,//"tabWidth": 2 → 2 spaces per indent.
+  "trailingComma": "es5",//"trailingComma": "es5" → Add trailing commas where valid in ES5 (objects, arrays).
+  "printWidth": 80//"printWidth": 80 → Wrap lines at 80 characters.
+}
+```
+
+**Husky** is like the *security guard* for your Git repository, runs scripts **before or after certain Git events** (like committing or pushing) to make sure bad code doesn’t get in.
+A tool for **managing Git hooks** in a project.
+
+- Catch problems *before* they go into the repository.
+- Automate repetitive checks like:
+    - Run ESLint before commit.
+    - Format code with Prettier before commit.
+    - Run tests before push.
+
+install dependency
+npm install --save-dev eslint prettier eslint-plugin-react eslint-config-prettier husky lint-staged
+
+npm install husky --save-dev
+
+npx husky init      // this creates a `.husky/` folder with a sample `pre-commit` file.
+
+npm install lint-staged --save-dev //lint staged
