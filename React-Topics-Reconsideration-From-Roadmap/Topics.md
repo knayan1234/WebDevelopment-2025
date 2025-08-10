@@ -6,10 +6,12 @@
 6. React Hook Form ⁉️
 7. Formik ❌
 8. Yup ❌
-9. Lazy Loadind/Routing ✅
+9. Lazy Loading/Routing ✅
 10. React.lazy() and suspense ✅
-11. Router Types
-12. Diffing Algorithm
-13. Ways of React app creation
-14. forwardRef
-15. Why functions are objects in JS and object and non object in JS
+11. Router Types ✅
+12. Diffing Algorithm ✅
+13. Ways of React app creation ✅
+14. SSR, CSR, SSG, treeshaking, CDN. ✅
+15. forwardRef
+16. Why functions are objects in JS + object and non object in JS
+17. Zustand
