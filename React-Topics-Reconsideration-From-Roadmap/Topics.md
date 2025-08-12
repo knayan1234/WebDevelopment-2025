@@ -15,3 +15,7 @@
 15. forwardRef
 16. Why functions are objects in JS + object and non object in JS
 17. Zustand
+18. UseReducer
+19. Redux ToolKit
+20. Headless UI's disclosure component and Libraries of Headless UI
+21.
