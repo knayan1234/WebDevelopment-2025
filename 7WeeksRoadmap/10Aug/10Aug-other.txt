@@ -1,0 +1,209 @@
+Vite and TurboRepo
+
+Vite (French word for "quick", pronounced `/vit/`, like "veet") is a build tool that aims to provide a faster and leaner development experience for modern web projects. It consists of two major parts:
+
+- A dev server
+- A build command
+
+like CRA , Vite also create project through command
+
+Turborepo is a high-performance build system for JavaScript and TypeScript codebases. It is designed for scaling monorepos. A monorepo is a single repository that contains multiple projects, which can be either related or unrelated but share the same dependencies
+
+vite and turboRepo are for different use cases
+
+vite- create a project easily with build in features and functionality . one of them is optimising bundle size and fast execution . in CRA webpack bundles entire codebase so it will take much time that problem is solved using vite .
+
+turboRepo is for handling monorepo-multiple projects(can be related or not related) - managing shared dependency between them
+Vite have build but that is per app, Turborepo manages how and when builds happen across many apps/packages.
+
+Without Turborepo:
+
+- have to manually `cd` into each folder and run `vite build`.
+- Every build runs from scratch — even if only `utils/` changed.
+
+With Turborepo:
+
+- It knows that if only `utils/` changed, it needs to rebuild:
+    - `utils/`
+    - Any app/package depending on `utils/`
+    - **And skip everything else** thanks to caching.
+
+ How They Work Together?
+
+Each app in monorepo still uses Vite for dev/build.
+
+Turborepo coordinates:
+
+- The order tasks run (`utils` builds before `web` if `web` imports `utils`).
+- What gets skipped using **remote/local cache**.
+
+DX- developer experience
+
+by using these vite+turboRepo and other features, it helps developers to split the code into packages 
+
+utilities can be one package- it can be shared by diff repos
+
+authentication can be one
+
+reusing components can be one
+
+like that developers can keep reusing packages- which help them to split the code 
+
+this helps developers to import @…./utils and one advantage is without registering to npm they can use this and this will help them for faster development
+
+also this packaging and splitting code help developers as One team can update `ui` while another works on `dashboard` without merge conflicts in unrelated files. can add reusable components(button….) . it reduce development time
+
+easy testing as well , can test packages in isolation mode
+
+in traditional monorepo even if 1 file change that entire package will build , also in fixed order-not based on dependency . it will build multiple files even if changes are only in 1
+
+in turbo all these are solved , only run files have change and its dependency files, run based on dependency
+
+Turbo stores the output of tasks in a local and optional remote cache:
+
+- If you run the same task again with the same inputs → instant cache hit.
+- Inputs tracked: source files, dependencies, environment variables, config files.
+- Can share cache between machines via remote storage (Vercel Remote Cache, S3, etc.).
+
+Example:
+
+- You build `utils` on CI once.
+- Next pipeline run → no code changes in `utils` → Turbo **restores** the compiled output from cache in milliseconds.
+
+vite app inside /apps
+
+npm create vite@latest apps/my-vite-app -- --template react
+
+
+apps/
+  my-vite-app/
+    index.html
+    package.json
+    src/
+    vite.config.js
+
+this will create vite app inside apps with folder name my-vite-app 
+
+.
+├── apps/
+│   └── my-vite-app/
+│       ├── src/
+│       ├── package.json
+│       └── vite.config.js
+├── packages/
+│   └── ui/
+│       ├── src/
+│       │   └── Button.jsx
+│       └── package.json
+├── package.json
+└── turbo.json
+
+
+folder structure can be like this . and if we want to use shared ui means ui inside package in new project/app
+
+
+packages/ui/package.json:
+
+converting /packages/ui as a package
+
+  "name": "@repo/ui",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "module": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "echo 'No build step yet'",
+    "dev": "echo 'UI dev mode'"
+  }
+}
+
+
+`src/index.js` (re-export components):
+
+export { default as Button } from './Button.jsx'
+
+src/Button.jsx:
+export default function Button({ children }) {
+  return <button style={{ padding: '8px 16px', background: 'skyblue' }}>{children}</button>
+}
+
+
+In root package.json:
+{
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}
+
+
+npm install
+
+
+configure Vite to Resolve `/packages/ui`
+In `apps/my-vite-app/vite.config.js`:
+
+
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import path from 'path'
+
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    alias: {
+      '@repo/ui': path.resolve(__dirname, '../../packages/ui/src')
+    }
+  }
+  server: {
+    fs: {
+      // Allow serving files from one level up
+      allow: ['..']
+    }
+  }
+})
+
+
+5. Import the UI Package in the Vite App
+`apps/my-vite-app/src/App.jsx`:
+
+
+import { Button } from '@repo/ui'
+
+export default function App() {
+  return (
+    <div>
+      <h1>Hello from Vite</h1>
+      <Button>Shared UI Button</Button>
+    </div>
+  )
+}
+
+
+6. Hot Reload Across Packages
+
+By default, Vite will not watch files outside the app folder unless you tell it to.
+Add to `vite.config.js`:
+
+
+server: {
+  watch: {
+    // Watch for changes in the UI package
+    paths: ['../../packages/ui/**']
+  }
+}
+
+
+Or for full DX, use Vite’s optimizeDeps.exclude so linked packages are not pre-bundled:
+
+optimizeDeps: {
+  exclude: ['@repo/ui']
+}
+
+
+7. Run with Turborepo
+From root:
+
+turbo dev --filter=my-vite-app
+Any change in `/packages/ui/src` will instantly hot reload in `/apps/my-vite-app`.

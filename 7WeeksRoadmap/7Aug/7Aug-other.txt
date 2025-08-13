@@ -1,0 +1,20 @@
+UseCallback , useMemo , React.memo functionalities are already given above
+
+memoisation can be counter productive?
+
+yes . In some scenarios instead of helping performance , these memoisation techniques can affect it .
+
+If a function or component is cheap to compute, memoizing it adds extra memory and comparison overhead for no real benefit.
+
+Frequent Re-renders with Changing Dependencies - Memoized values/functions are still recreated whenever dependencies change ,leading to same re-renders + memoization cost.
+
+`React.memo` uses shallow comparison so complex objects still cause re-renders unless deeply memoized. You may end up over-engineering
+These hooks don’t prevent re-renders, they only prevent reference changes
+
+When Memoization is Worth It but use memoization **only when**:
+
+- The component is heavy to render
+- It receives stable props
+- You’re passing functions/objects to memoized children and want to prevent unnecessary re-renders
+
+Memoization is a performance optimization  pattern. If used without  real need, it can be counterproductive by increasing memory usage and complexity without benefits.

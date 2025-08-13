@@ -1,0 +1,113 @@
+lazy loading is a technique in web development that allows you to load components only when they are needed, rather than loading everything upfront. This is especially useful in large applications where loading all components at once could slow down the initial page load. Same goes with React's built-in React.lazy and Suspense for implementing lazy loading of routes
+
+React.lazy allows you to define components that are loaded only when the route is accessed.
+Suspense is used to specify a fallback UI (like a loading spinner) while the component is being loaded.
+
+Lazy loading is an approach used to speed up the loading of web pages by loading content (images, video, or text) only when needed rather than loading them all at once.
+main situations where we can use lazy loading
+You have pages with a lot of images or videos that are not visible right away 
+Pages like social media feeds, news sites, or e-commerce product listings, where content is loaded continuously as the user scrolls down.
+Applications that handle large datasets (for example, dashboards, reports, tables) where not all data is visible at once.
+On pages where SEO is critical, but you want to balance performance by not loading everything upfront.
+these are the main reasons or situations
+Lazy loading can be applied to multiple resources and through multiple strategies.
+
+1. Code splitting
+Code splitting is a technique used in web development to improve the performance of web applications by reducing the initial amount of JavaScript code that needs to be loaded by the browser. Instead of bundling all the application's code into a single, large file, code splitting breaks the application into smaller, independent chunks or modules. These chunks are then loaded on demand, only when they are needed, rather than all at once during the initial page load.
+
+// Traditional import (all in one bundle)
+import MyHeavyComponent from './MyHeavyComponent';
+
+// Code splitting (lazy load)
+const MyHeavyComponent = React.lazy(() => import('./MyHeavyComponent'));
+
+
+2.css code splitting , routing also a kind of code splitting,
+
+<img src="placeholder.jpg" data-src="actual-image.jpg" alt="Lazy loaded image" loading="lazy">
+<!--the **loading=”lazy”** attribute tells the browser to load the image only when it becomes visible in the viewport.-->
+
+
+JS
+
+<iframe class="lazy" data-src="https://example.com" title="Lazy Loaded Iframe"></iframe>
+
+3.CSS is render-blocking by default, 
+
+  Download CSS.
+  Parse it into the **CSSOM** (CSS Object Model).
+  Combine it with the **DOM** to construct the **Render Tree**.
+  Only then can the page be painted (rendered).
+
+so the issue here is if the css file is complex it can affect the rendering of component.
+it can be solved by media tag
+
+<link href="style.css" rel="stylesheet" media="all" /><!--this will be applicable for everything , no optimization)-->
+<link href="portrait.css" rel="stylesheet" media="(orientation:portrait)" /><!--will be only fpr portrait -->
+<link href="print.css" rel="stylesheet" media="print" /><!--only wile prinitng , css code splitting-->
+like this can do lazy loading
+
+Route based code splitting using React.lazy means routing is code splitting . instead of 1 page its divided into multiple pages
+lazy loading load those components if and only if when its needed or that route added in URL
+in this scenario one suspense should be there to show loader while content is being rendering
+
+import React, { Suspense, lazy } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+// 🧠 Lazy-loaded components for route-based splitting
+const Home = lazy(() => import('./pages/Home'));
+const About = lazy(() => import('./pages/About'));
+const Contact = lazy(() => import('./pages/Contact'));
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Suspense fallback={<div>Loading...</div>}> //needed
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+        </Routes>
+      </Suspense>
+    </BrowserRouter>
+  );
+}
+
+
+Dynamic Import
+
+In JavaScript a dynamic import allows to load a module at runtime, instead of at the top of the file (statically).
+
+import('./MyComponent').then((module) => {
+// use module.default
+});
+
+This returns a Promise that resolves to the module.
+ It enables on-demand, asynchronous loading
+ Helps in code splitting and performance optimization
+
+lazy(() => import('./pages/Home'));
+
+this lazy is a wrapper around dynamic import
+lazy`(...)` → tells React to treat the loaded component as a renderable React component with Suspense handling the loading state.
+
+You cannot use raw `import()` alone to render a component without lazy
+
+- Use dynamic import for any JS module, not just components
+- Use `React.lazy()` only for React components
+- for React component with lazy, import cant add
+
+// Load a heavy utility function only when needed
+async function handleClick() {
+const { heavyFunction } = await import('./utils');
+heavyFunction();
+}
+
+Dynamic Import with React.lazy
+
+const ProfilePage = React.lazy(() => import('./pages/Profile'));
+
+// In JSX
+<Suspense fallback={<Loading />}>
+<ProfilePage />
+</Suspense>
