@@ -18,4 +18,5 @@
 18. UseReducer
 19. Redux ToolKit
 20. Headless UI's disclosure component and Libraries of Headless UI
-21.
+21. GraphQL
+22. JWT and oAuth
