@@ -1,0 +1,164 @@
+in a normal fetch , we can abort the fetch before sucess means we can cancel an api request
+
+ const controller=new AbortController();
+ const signal=controller.signal;
+ 
+  const res=await fetch('https://jsonplaceholder.typicode.com/users',{signal});  //need to pass signal as 2nd arg
+  
+   if(e.name==="AbortError"){
+          console.log(e.name); 
+   }
+       
+  controller.abort(); // this will abort the request 
+
+
+
+Full code
+
+import React, { useEffect, useState } from 'react';
+
+function useFetch() {
+    const controller=new AbortController();
+    const signal=controller.signal;
+    const [loading,setLoading]=useState(false);
+    const [error,setError]=useState(false);
+    const [data,setData]=useState(null);
+    useEffect(()=>{
+        const fetchAPI=async()=>{
+             try{
+                 await new Promise(res => setTimeout(res, 5000));
+
+                setLoading(true);
+                setError(false);
+                const res=await fetch('https://jsonplaceholder.typicode.com/users',{signal});
+                const data=await res.json();
+                setData(data);
+                 setLoading(false);
+            }
+            catch(e){
+                if(e.name==="AbortError"){
+                    console.log(e.name);
+                }
+                console.log("error"+e);
+                setError(true);
+            }
+        }
+        fetchAPI();
+
+        setTimeout(()=>{
+            controller.abort();
+        },3000);
+    },[])
+   return {data,error,loading}
+}
+
+export default useFetch;
+
+output: errorAbortError: signal is aborted without reason
+
+
+
+Fetch vs Axios
+
+get
+
+fetch("https://jsonplaceholder.typicode.com/users")
+.then(res => res.json())
+.then(data => console.log(data))
+.catch(err => console.error(err));
+
+axios.get("https://jsonplaceholder.typicode.com/users")
+  .then(res => console.log(res.data))
+  .catch(err => console.error(err));
+  
+ in axios automatically converting to json 
+
+Post
+
+fetch("https://jsonplaceholder.typicode.com/posts", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },    // this is needed to inform server about type of data passing
+  body: JSON.stringify({ title: "foo", body: "bar", userId: 1 })
+})
+  .then(res => res.json())
+  .then(data => console.log(data))
+  .catch(err => console.error(err));
+  
+  axios.post("https://jsonplaceholder.typicode.com/posts", {
+  title: "foo",
+  body: "bar",
+  userId: 1
+})
+  .then(res => console.log(res.data))
+  .catch(err => console.error(err));
+
+
+Cancelling request
+
+    const controller = new AbortController();
+    const getUsers = async () => {
+      try {
+        const res = await fetch("https://jsonplaceholder.typicode.com/users", {
+          signal: controller.signal,
+        });
+      ...
+      } catch (err) {
+        if (err.name === "AbortError") {
+          console.log("Fetch aborted");
+        } else {
+          console.error(err);
+        }
+      }
+    };
+
+    getUsers();
+
+    // Cancel request after 1 second
+    setTimeout(() => controller.abort(), 1000);
+
+    return () => controller.abort();
+  }, []);
+
+ ....
+ 
+ 
+ axios
+
+import axios from "axios";
+
+export default function App() {
+  useEffect(() => {
+    const controller = new AbortController();
+
+    const getUsers = async () => {
+      try {
+        const res = await axios.get(
+          "https://jsonplaceholder.typicode.com/users",
+          { signal: controller.signal }
+        );
+        console.log(res.data);
+      } catch (err) {
+        if (axios.isCancel(err)) {
+          console.log("Axios request canceled");
+        } else if (err.name === "CanceledError") {
+          console.log("Axios fetch aborted");
+        } else {
+          console.error(err);
+        }
+      }
+    };
+
+    getUsers();
+
+    // Cancel after 1 second
+    setTimeout(() => controller.abort(), 1000);
+
+    return () => controller.abort();
+  }, []);
+
+  return <div>Check console</div>;
+}
+
+
+npm install axios
+axios need to install unlike fetch which is browser inbuilt
