@@ -20,3 +20,5 @@
 20. Headless UI's disclosure component and Libraries of Headless UI
 21. GraphQL
 22. JWT and oAuth
+23. Prisma, PGSQL
+24.
