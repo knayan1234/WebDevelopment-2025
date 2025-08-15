@@ -18,7 +18,7 @@ HTTP Methods
 | **PATCH**  | Update    | `/users/5`  | Update part of user with ID 5 |
 | **DELETE** | Remove    | `/users/5`  | Delete user with ID 5         |
 
-[GeeksforGeeks-RestAPI] (https://www.geeksforgeeks.org/node-js/rest-api-introduction/)
+[GeeksforGeeks-RestAPI](https://www.geeksforgeeks.org/node-js/rest-api-introduction/)
 
 ### How to cancel fetch request
 
