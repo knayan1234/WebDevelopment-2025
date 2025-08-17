@@ -1,0 +1,110 @@
+how to protect an API route in express?
+
+there are multiple ways to protect route
+
+1. using middle ware
+2. checking before route based on role, session , JWT ,authenticate flag etc
+
+whats this middleware?
+
+middleware  is nothing just normal function , its protecting route based on the way how its called
+
+Eg:
+
+middleware function
+
+```jsx
+function authenticate(req,res,next){
+	const token=req.headers["authorization"].split(' ')[1]; // this key is the tken passing through header. authenticate:'Bearer key' that key
+	if(!token){
+	 return res.status(401).json({message:"unauthorized accesss"});
+	 }
+	 
+	 try{
+	 const validate=jwt.verify(token,process.env.token);//verify the token got with env one to verify token is valid or not
+	 req.user=validate; //attach user info to the request
+	 next();
+	 }
+	 catch{
+	 return res.status(401).json({message:"unauthorized"});
+	 }
+	 
+}
+
+module.exports = authenticate;
+
+```
+
+To use this in component
+
+```jsx
+
+const authenticate=require("./authenticate");  //like this can import
+const router=express.Router();
+
+router.get("/protected",authenticate,(req,res)=>{
+ res.json({message:"successful"});
+ });
+ 
+ here implementation have 3 fields thats how system differentitate between normal function and middleware. here
+ first it will execute middleware and only if next() call the promise part will get execute otherwise it will stop execution at 
+ the middleware itself
+ 
+```
+
+if we add like this
+
+app.use(authenticate); // it will run on every route below this line
+
+similarly if we want to verify using any particular constant or api key instead of jwt thats also possible with if else block
+
+or session, role everything is possible
+
+```jsx
+function authorizeRole(role) {
+    return (req, res, next) => {
+        if (req.user && req.user.role === role) {
+            next();
+        } else {
+            res.status(403).json({ message: "Forbidden: Insufficient rights" });
+        }
+    };
+}
+
+app.get('/admin', authenticate, authorizeRole('admin'), (req, res) => {
+    res.send('Welcome, admin!');
+});
+```
+
+steps for setting up the project
+
+npm init -y
+
+npm i express
+
+important step in js file “`app.listen(PORT)` ”→ actually starts the server.without this server will not start
+
+node server.js - command to start server
+
+if FE code runs at 5172 and BE in 3000 then data will not load in 5172 until we install cors in BE because by default browser will block the cross origin request’ we should install cors then 
+
+there are different ways to use it
+
+// Allow all origins (dev only!)
+app.use(cors());
+
+app.use(cors({
+origin: '[http://localhost:5173](http://localhost:5173/)', // your React app URL
+methods: ['GET', 'POST'],
+allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+in FE
+
+{
+method: "GET",
+headers: {
+"Content-Type": "application/json",
+"Authorization": `Bearer ${token}`
+}
+})

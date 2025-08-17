@@ -1,0 +1,225 @@
+PostgreSQL and Prisma
+
+PostgreSQL is a relational database. which follows ACID property and arrange data in table format
+
+Prisma is a Type-safe ORM (Object Relational Mapper) for JavaScript & TypeScript.Lets you interact with a database (like PostgreSQL) using JS/TS instead of raw SQL.
+
+- **PostgreSQL** stores your data.
+- **Prisma** connects to PostgreSQL using a connection string.
+- You define your models in `schema.prisma` instead of writing all SQL manually.
+- Prisma generates type-safe client code based on those models.
+- You run **migrations** to keep your database schema in sync with your Prisma models
+
+why prisma preferred over SQL in typescript apps?
+1. If you mistype a column name or use the wrong type in a query, you won’t know until **runtime**.
+The Prisma Client is **auto-generated** based on your `schema.prisma` so TypeScript immediately warns that `username` doesn’t exist — you meant `name`.
+
+2. You have to manually write `ALTER TABLE`, keep migration files organized, and ensure schema sync across environments. 
+`npx prisma migrate dev` generates and applies migration SQL for you, keeping both your `schema.prisma` and database in sync.
+
+in short
+
+postgreSql is database to store data and prisma is a something which help me to write long sql queries from the script which i write in javascript or typescript
+
+schema in prisma is like , i write schema in the shape of how db should look like , then prisma will create that db in postgresql for me
+
+migration is creating or updating table and columns
+
+ seeding is filling database with dummy data
+
+first i will write seeding code then will run . during this time Prisma will fill db will that dummy data
+
+Here’s how it all connects:
+
+1. **Install PostgreSQL** → The database program.
+2. **Install Prisma** → The helper tool.
+3. **Write `schema.prisma`** → The blueprint for tables.
+4. **Run migration** → Actually create those tables in PostgreSQL.
+5. **Write seed script** → Insert test data.
+6. **Run the seed** → Your database now has sample users and products.
+
+installation
+
+**postgresql**-either download and install from official site or use chocolaty
+
+**prisma**-npm init -y
+
+npm install prisma --save-dev
+npm install @prisma/client
+
+npx prisma init
+
+This will:
+
+- Create a **`prisma`** folder with a `schema.prisma` file.
+- Create a `.env` file for environment variables.
+
+Inside `.env` you’ll see:
+
+```
+DATABASE_URL="postgresql://user:password@localhost:5432/mydb?schema=public"
+
+```
+
+We’ll update this later with your PostgreSQL database credentials.
+
+This file is your **database blueprint**.
+
+Example empty schema (after init):
+
+generator client {
+provider = "prisma-client-js"
+}
+
+datasource db {
+provider = "postgresql"
+url      = env("DATABASE_URL")
+}
+
+**blue print of table looks like this**
+
+```jsx
+// Generate the Prisma Client for JS/TS
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Connect to PostgreSQL
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User table blueprint
+model User {
+  id       Int       @id @default(autoincrement()) // Primary key
+  name     String                                     // User's name
+  email    String    @unique                          // Unique email
+  products Product[]                                  // A user can have many products
+}
+
+// Product table blueprint
+model Product {
+  id     Int     @id @default(autoincrement()) // Primary key
+  name   String                               // Product name
+  price  Float                                // Product price
+  user   User    @relation(fields: [userId], references: [id]) // Link to User table
+  userId Int                                  // Foreign key
+}
+
+```
+
+**migration**
+
+Before running a migration, Prisma needs to know **where** your database is.
+
+Open `.env` and set:
+
+DATABASE_URL="postgresql://USERNAME:PASSWORD@localhost:5432/mydb?schema=public"
+
+- `USERNAME` → Your PostgreSQL username (default is `postgres` if local install).
+- `PASSWORD` → The password you set during PostgreSQL install.
+- `mydb` → The database name you want to use (create it first if it doesn’t exist).
+
+To create the database from terminal:
+
+createdb -U postgres mydb
+
+In your project folder, run:
+
+npx prisma migrate dev --name init
+
+What happens:
+
+1. Prisma compares `schema.prisma` with your current DB.
+2. Creates a migration file in `prisma/migrations/`.
+3. Executes SQL commands to make tables `User` and `Product`.
+4. Updates your DB schema.
+5. Generates the Prisma Client.
+
+npx prisma studio
+This opens a browser UI where you can see your User and Product tables (empty for now).
+
+**seeding**
+
+In your project root, make a file:
+
+prisma/seed.ts
+
+```jsx
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
+
+async function main() {
+  // Create first user with products
+  const alice = await prisma.user.create({
+    data: {
+      name: "Alice",
+      email: "alice@example.com",
+      products: {
+        create: [
+          { name: "Laptop", price: 1200 },
+          { name: "Phone", price: 800 },
+        ],
+      },
+    },
+  });
+
+  // Create second user with products
+  const bob = await prisma.user.create({
+    data: {
+      name: "Bob",
+      email: "bob@example.com",
+      products: {
+        create: [
+          { name: "Tablet", price: 600 },
+          { name: "Camera", price: 500 },
+        ],
+      },
+    },
+  });
+
+  console.log({ alice, bob });
+}
+
+// Run the seed
+main()
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });
+
+```
+
+In `package.json`, add this inside the JSON:
+
+```json
+"prisma": {
+  "seed": "ts-node prisma/seed.ts"
+}
+
+```
+
+If you don’t have `ts-node` installed:
+
+```bash
+npm install ts-node typescript --save-dev
+
+```
+
+npx prisma db seed
+
+- Prisma connects to your PostgreSQL DB.
+- Inserts Alice and Bob into **User** table.
+- Inserts their products into **Product** table.
+
+npx prisma studio
+✅ You should now see:
+
+2 Users (Alice, Bob)
+
+4 Products linked to those users.

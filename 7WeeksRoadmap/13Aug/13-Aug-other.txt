@@ -1,0 +1,302 @@
+GraphQL vs REST
+GraphQL is a query language for APIs and a runtime for executing those queries, developed by Facebook in 2012 and open-sourced in 2015.
+
+- Instead of hitting multiple REST endpoints, send a **single query** to a GraphQL server.
+- You **define exactly what data you want** and get back exactly that — no more, no less.
+- avoid over-fetching , under-fetching - situation like hitting multiple endpoints and getting unwanted data both these issues will not occur in graphql
+
+But graphQL is not always best
+
+- **Simple APIs:** REST is simpler to implement and cache with HTTP.
+- **Performance on very large data:** If queries aren’t well-designed, GraphQL can cause heavy DB load.
+- **File uploads & streaming:** REST might be easier.
+- **Caching:** REST works well with browser/CDN caching via HTTP verbs & headers; GraphQL caching is trickier.
+
+Rest API Implementation
+
+  *   first step is creating a node.js project
+
+> mkdir rest-example
+cd rest-example
+npm init -y
+> 
+
+here a folder created , moved to that folder and init method created package.json file with all the necessary dependency and details
+
+    * install Express
+
+> npm install express
+> 
+
+installs the Express library so we can easily create routes like `/users`.
+
+Express, is a minimal and flexible Node.js web application framework. It is widely recognized as the server framework for Node.js, designed for building web applications and APIs.
+
+* Create `server.js` (the server file)
+
+```jsx
+const express = require("express");     // load Express- loads the library.
+const app = express();                  // create the app (like "new server"),makes the server object where
+																						//	 we register routes.
+const PORT = 3000;
+
+app.use(express.json());                // middleware: parse JSON bodies automatically,little functions
+														//	 that run on every request. This one parses incoming JSON so req.body has your data.
+
+const users = [{ id: 1, name: "Alice" }];
+const posts = [{ id: 1, title: "Hello World", userId: 1 }];
+
+// GET /users
+app.get("/users", (req, res) => {
+  res.json(users);                      // respond with JSON array
+});
+
+// GET /users/:id  (path parameter)
+app.get("/users/:id", (req, res) => {
+  const id = Number(req.params.id);     // req.params reads the dynamic part of URL
+  const user = users.find(u => u.id === id);
+  if (!user) return res.status(404).json({ error: "Not found" });
+  res.json(user);
+});
+
+// POST /users  (create)
+app.post("/users", (req, res) => {
+  const { name } = req.body;            // express.json() let us read JSON body
+  const newUser = { id: users.length+1, name };
+  users.push(newUser);
+  res.status(201).json(newUser);        // 201 means "created"
+});
+
+app.listen(PORT, () => console.log(`REST API running on http://localhost:${PORT}`));
+```
+
+To run server
+
+> node server.js
+> 
+
+Open `http://localhost:3000/users` in browser — you’ll see the JSON.
+
+*  CORS — letting your frontend (on another port) call the server
+
+Browsers block cross-origin requests by default (front-end served from `localhost:3000` calling API on `localhost:3001`). To allow it:
+
+> npm install cors
+> 
+
+> const cors = require("cors");
+app.use(cors({ origin: "[http://localhost:3000](http://localhost:3000/)" }));
+> 
+
+**GraphQL Implementation**
+GraphQL replaces many REST endpoints with **one endpoint** that accepts queries specifying exactly which fields you want.
+
+> mkdir graphql-example     //creating a folder for implemenation
+cd graphql-example    //changing to that directory
+npm init -y          //package.json creating
+npm install express express-graphql graphql      //installing all 3 packages
+> 
+
+- `express` — same server runtime.
+- `graphql` — GraphQL core library (schema, parser, types).
+- `express-graphql` — easy glue to mount a GraphQL endpoint on Express.
+
+*   Create `server.js`
+
+```jsx
+const express = require("express");         //same as REST
+const { graphqlHTTP } = require("express-graphql");            //importing all packages installed
+const { buildSchema } = require("graphql");
+
+const app = express();      //same as REST
+const PORT = 4000;
+
+// Mock data
+const users = [{ id: 1, name: "Alice" }];                     //mock data
+const posts = [{ id: 1, title: "Hello World", userId: 1 }];
+
+// 1) Schema: defines types & entry points
+const schema = buildSchema(`
+  type Post {
+    id: ID!               // each post have id and title !means should not be null
+    title: String!
+  }
+  type User {            // each user should have not null id,name and posts
+    id: ID!
+    name: String!
+    posts: [Post]   # nested field
+  }
+  type Query {          // read properties , call queries
+    user(id: ID!): User
+    users: [User]
+  }
+  type Mutation {       //write properties 
+    createUser(name: String!): User
+  }
+`);
+//the schema is a contract: frontend devs can see exactly what fields exist.
+// 2) Resolvers: tell GraphQL how to get the data for each field
+const root = {
+  users: () => users,
+  user: ({ id }) => {
+    const u = users.find(x => x.id == id);
+    if (!u) return null;
+    // attach posts will be resolved by the User.posts resolver below
+    return u;
+  },
+  createUser: ({ name }) => {
+    const newUser = { id: users.length + 1, name };
+    users.push(newUser);
+    return newUser;
+  },
+  // Field-level resolver for User.posts (optional — GraphQL will try to use default)
+  User: {
+    posts: (parent) => posts.filter(p => p.userId === parent.id)
+  }
+};
+
+// 3) Mount GraphQL endpoint with GraphiQL UI enabled
+app.use("/graphql", graphqlHTTP({     //Here, /graphql is just the endpoint where all GraphQL queries are sent.
+                                      //if you send a request to http://localhost:3000/graphql with a query body:Express will see:Express will see it as Hey, this request is going to /graphql → pass it to the graphqlHTTP middleware.”
+  schema,
+  rootValue: root,
+  graphiql: true,
+}));
+
+app.listen(PORT, () => console.log(`GraphQL API running at http://localhost:${PORT}/graphql`));
+
+```
+
+main thing to remember is the type value in schema will be using in query and mutation, the value of left side in query and mutation will be defining later in root
+For every **field** directly inside `Query` or `Mutation`, you define a matching **function** in the root resolver.
+
+- **Schema** says: "user exists, it needs an `id`, and it returns a `User`s type."
+- **Root resolver** says: "When someone calls createUser, here’s the function to run."
+- The **name on the left-hand side in `Query`/`Mutation`** (like `getUser`) **must match** the key in `root`.
+
+FE code of graphQl will look like this
+
+Rest will be normal fetch()
+
+Graphql
+
+- You **always** send `POST` to `/graphql`.
+- You **control** the data shape you want back.
+- No need to remember `/users`, `/posts`, `/user/1` — just one endpoint.
+- You can **nest fields** in one request (like `user` → `posts`), which would normally take multiple REST calls.
+
+```jsx
+async function getAllUsers() {
+  const query = `
+    query {
+      users {   //must match def in schema
+        id
+        name
+      }
+    }
+  `;
+  
+  const res = await fetch("http://localhost:4000/graphql", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ query })
+  });
+
+  const { data } = await res.json();
+  console.log(data.users);
+}
+
+getAllUsers();
+
+```
+
+```jsx
+async function getUserWithPosts(id) {
+  const query = `
+    query {
+      user(id: ${id}) {
+        id
+        name
+        posts {
+          id
+          title
+        }
+      }
+    }
+  `;
+  
+  const res = await fetch("http://localhost:4000/graphql", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ query })
+  });
+
+  const { data } = await res.json();
+  console.log(data.user);
+}
+
+getUserWithPosts(1);
+
+```
+
+like this can use graphql in FE side
+
+To setup apollo client
+
+> npm install @apollo/client graphql
+> 
+
+creating new file
+
+`src/apolloClient.js`:
+
+```jsx
+import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
+
+//ApolloClient → The main object that manages GraphQL requests and responses.
+//InMemoryCache → Apollo’s built-in caching system; it stores results in memory so repeated queries don’t refetch from the server unnecessarily.
+//createHttpLink → Creates a network “link” to your GraphQL endpoint (like an API URL).
+//setContext → A function that lets us modify request headers (or other request options) before sending the request — perfect for adding authentication tokens.
+
+// GitHub GraphQL endpoint,Every GraphQL API needs a single endpoint
+const httpLink = createHttpLink({
+  uri: "https://api.github.com/graphql",
+});
+
+// Attach GitHub token to every request
+//GitHub requires an Authorization header for all GraphQL API requests.
+//setContext runs before every request, so we can inject headers dynamically (could also inject
+// different tokens depending on the user).
+//...headers ensures we keep any existing headers (like Content-Type) while adding the auth one.
+const authLink = setContext((_, { headers }) => {
+  return {
+    headers: {
+      ...headers,
+      Authorization: `Bearer YOUR_GITHUB_TOKEN_HERE`, // replace with your token
+    },
+  };
+});
+
+// Apollo Client setup
+//link → Combines the authLink (adds headers) with the httpLink (sends requests to GitHub).
+//.concat() means: “first run authLink, then run httpLink.”
+//cache → Apollo’s InMemoryCache stores results locally to:
+//Avoid redundant network requests
+ //Make the UI feel faster
+//Enable offline or instant refetch capabilities
+
+export const client = new ApolloClient({
+  link: authLink.concat(httpLink),
+  cache: new InMemoryCache(),
+});
+
+```
+
+Wrap your app with `ApolloProvider`
+
+<ApolloProvider client={client}>
+<App />
+</ApolloProvider>
+
+in component we can define query and use usequery to fetch values
