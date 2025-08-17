@@ -1,0 +1,47 @@
+right now types of response I added manually but how can i infer types from BE responses 
+
+there are different ways to acheive this
+
+1. **If backend provides OpenAPI/Swagger**
+
+if swagger is available then can generate types automatically using
+
+```jsx
+npx openapi-typescript http://localhost:3000/swagger.json --output types/api.d.ts
+```
+
+1. **Infer from Axios response directly**
+
+Axios returns a generic `AxiosResponse<T>`. You can extract the type with `typeof` and `Awaited`.
+
+```jsx
+const loginRes = await axios.post<LoginToken>("http://localhost:3000/api/login");
+
+// Infer type automatically from the actual axios call
+type LoginResponse = Awaited<typeof loginRes>;
+// Equivalent to AxiosResponse<LoginToken>
+
+...
+type ProductsResponse = typeof res.data;
+// Inferred as Products (Product[])
+
+```
+
+here awaited is used in first because we need to wait till Promise is resolved and then need to get the type
+
+in 2nd promise is already resolved we just want its type
+
+1. **Use `as const` with mock data (for local inference)**
+
+```jsx
+const mockProduct = {
+  id: 1,
+  name: "Laptop",
+  price: 2000,
+} as const;
+
+type Product = typeof mockProduct;
+
+```
+
+if have mock value using as const we can add
