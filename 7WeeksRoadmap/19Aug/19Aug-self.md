@@ -1,3 +1,26 @@
 ### Unit testing
 
 Unit testing is a software testing method where you test the smallest isolatable parts of your code—called "units"—in complete isolation from the rest of the application. In React, a unit is typically a single component, function, or hook. The goal is to ensure each unit behaves exactly as expected under various conditions, like different inputs (props), states, or user interactions.
+
+1. Jest: A popular, all-in-one testing framework from Facebook. It's great for React because it includes built-in assertions, mocking, and a test runner. It's zero-config for many setups and works well with Babel for JSX.
+
+2. Vitest: A faster, Vite-powered alternative to Jest. It's designed for modern projects (especially those using Vite for bundling) and offers similar APIs to Jest, making it easy to switch. Vitest is lightweight, runs tests in parallel, and supports ESM natively.
+
+> Explanation of the code written in vitest
+
+| Code Snippet                                                        | Purpose/Meaning               | Explanation                                                                           | Example Usage                                                                            | Best Practices                                                           |
+| ------------------------------------------------------------------- | ----------------------------- | ------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| import { render, screen, fireEvent } from '@testing-library/react'; | Imports Testing Utilities     | Brings in methods for rendering components, querying DOM, and simulating user events. | render(), screen.getByText('Click Me'), fireEvent.click(buttonElement)                   | Use RTL imports for user-centric testing, prefer queries by text or role |
+| import '@testing-library/jest-dom';                                 | Extends Assertions            | Adds custom jest-dom matchers like toBeInTheDocument, toBeDisabled.                   | expect(button).toBeInTheDocument()                                                       | Always import once in setupTests.js for global availability              |
+| import { describe, it, expect, vi } from 'vitest';                  | Testing Framework Functions   | Vitest provides globals to define suites, tests, assertions, and mocks.               | describe('Button', () => { it('renders', () => { expect(...).toBe... }) })               | Use globals enabled by vite.config.js; use vi for mocking functions      |
+| describe('Button Component', () => { ... })                         | Test Suite Grouping           | Groups related tests with a descriptive label for clarity in reports.                 | describe('Button Component', () => { ... })                                              | Group closely related tests; use descriptive names                       |
+| it('renders with default text', () => { ... })                      | Individual Test Case          | Defines a single scenario with Arrange-Act-Assert steps verifying one behavior.       | it('renders with default text', () => { render(...); expect(...).toBeInTheDocument(); }) | Write concise and focused tests; cover all important scenarios           |
+| const mockOnClick = vi.fn();                                        | Mock Function for Props       | Creates a fake function to spy on calls without side effects.                         | render(); fireEvent.click(...); expect(mockOnClick).toHaveBeenCalled();                  | Mock callback props to isolate component behavior                        |
+| render();                                                           | Rendering Component           | Mounts the component in a virtual DOM for testing.                                    | render()                                                                                 | Always render the component before querying or interacting               |
+| screen.getByText('Click Me');                                       | Querying Rendered DOM         | Finds an element by visible text, simulating user's view.                             | const button = screen.getByText('Click Me');                                             | Prefer user-centric queries (by text, role) for robust tests             |
+| fireEvent.click(buttonElement);                                     | Simulating User Events        | Triggers events like clicks to test interactivity.                                    | fireEvent.click(button);                                                                 | Use fireEvent or userEvent for realistic interactions                    |
+| expect(button).toBeInTheDocument();                                 | Assertions to Verify Behavior | Checks if element exists or matches criteria in output.                               | expect(button).not.toBeDisabled();                                                       | Use rich jest-dom matchers to improve test clarity                       |
+
+### Intergeration testing
+
+It is testing to check full flow
