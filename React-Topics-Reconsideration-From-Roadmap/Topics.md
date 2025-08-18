@@ -22,4 +22,11 @@
 22. JWT and oAuth
 23. Prisma, PGSQL
 24. Axios
-25.
+25. Higher order component
+26. Husky
+27. Turborepo and monoRepo
+28. ShadCN UI and Radix UI
+29. tabIndex "-1"
+30. postcss and autoprefixer in Tailwind
+31. Manual focus trap
+32. Snapshot testing
