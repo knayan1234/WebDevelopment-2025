@@ -30,3 +30,5 @@
 30. postcss and autoprefixer in Tailwind
 31. Manual focus trap
 32. Snapshot testing
+33. Jest/vitest unit testing
+34. Cypress
