@@ -32,3 +32,4 @@
 32. Snapshot testing
 33. Jest/vitest unit testing
 34. Cypress
+35. CI/CD
