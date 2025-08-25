@@ -84,8 +84,65 @@ Well-known symbols are special, pre-made symbols built into JavaScript, like sta
 
    Imagine you have a toy box with fruits: apple, banana, cherry. Normally, JavaScript knows how to loop through built-in lists (like arrays) using for...of. But what if your toy box is a plain object? It won't loop automatically. Symbol.iterator lets you add a "loop rule" to make it work like a list.
 
+```js
+// Step 1: Make an empty box.
+let box = {};
+
+// Step 2: Add the special label with a star function and yield.
+box[Symbol.iterator] = function* () {
+  yield 1; // Give 1.
+  yield 2; // Give 2.
+  yield 3; // Give 3.
+};
+
+// Step 3: Go through the box. for...of takes one by one.
+for (let number of box) {
+  console.log(number); // Shows 1, then 2, then 3.
+}
+```
+
 2. `Symbol.toString`
 
 > Need to check code - hard topic
 
-> Few topics left. - Difficult, Re visit
+## Enumeration and Property/Key Visibility
+
+Enumeration means listing all small boxes inside a big box. Property/key visibility means can you see or find them easy. Symbols hide them from lists. You need the exact symbol to see.
+
+For a child: Like hiding a block inside another. List shows open ones, not hidden.
+
+Basic example:
+
+```javascript
+// Symbol key.
+let hiddenKey = Symbol("hidden");
+
+// Box with open and hidden.
+let box = { open: "yes", [hiddenKey]: "no" };
+
+// List (enumerate).
+console.log(Object.keys(box)); // ["open"] – hidden not shown.
+```
+
+## How Would You Make a Property Non-Enumerable and Non-Guessable in JS?
+
+To make a property (small box) non-enumerable (not in lists) and non-guessable (hard to find), use a symbol as key and set enumerable to false.
+
+simple definition- Hide it with a special key and say "don't list it".
+
+Basic example:
+
+```js
+// Special key.
+let secretKey = Symbol("secret");
+
+// Make box.
+let box = {};
+
+// Add hidden property.
+Object.defineProperty(box, secretKey, { value: "hidden", enumerable: false });
+
+// List.
+console.log(Object.keys(box)); // [] – not shown, can't guess without key.
+console.log(box[secretKey]); // "hidden" – if you have key.
+```
