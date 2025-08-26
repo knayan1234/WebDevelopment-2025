@@ -1,0 +1,45 @@
+End-to-end (E2E) testing is done to **validate the complete flow of an application from the user’s perspective**, ensuring that all integrated components work together as expected.
+
+Helps to ensure that new features or code changes do not break existing flows.
+
+unit testing- testing each feature separately
+
+E2E- testing entire user flow - Can a user open the app, log in with valid credentials, and land on the dashboard?
+
+| Aspect | Unit Test | E2E Test |
+| --- | --- | --- |
+| **Speed** | ⚡ Fast | 🐢 Slow |
+| **Scope** | Small piece of code | Full user journey |
+| **Debugging** | Easy (isolated) | Harder (many moving parts) |
+| **Maintenance** | Low effort | High effort |
+| **Confidence** | Low (logic only) | High (real-world flows) |
+| **Flakiness** | Rare | Common |
+
+Eg:
+
+- 100 unit tests
+- 20 integration tests
+- 5 E2E tests (like login, checkout, payment, logout)
+
+npm install cypress --save-dev
+npx cypress open
+
+**Run Cypress in Headless Mode**
+
+For CI/CD or faster runs:
+
+npx cypress run
+
+in some projects after oprn command one cypressfolder will create automatically but in some projects especially vite 10 onwards it will not create we need to manually create it
+
+**cypress folder**
+
+inside 3 folders and 1 config file
+
+3 folders⇒e2e-test cases, fixtures-mock data, support-global config and commands
+
+Cypress recommends naming test files with `.cy.js` (or `.cy.ts` if using TypeScript) to **clearly distinguish Cypress tests** from unit tests (like `App.test.js` in Jest).
+
+name can be anything but it should match with feature so it will be easy to organize test suit
+
+cypress.config file should be in the root of project, same level as package.json

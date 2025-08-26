@@ -1,0 +1,108 @@
+Frontend Monitoring tools logs JS errors, Api request/response errors , user behavior monitoring , this monitoring helps to
+
+- Improve **UX** by quickly detecting crashes or slowdowns.
+- Provide **real-world data** on how apps perform in user devices.
+- Help prioritize fixes that affect the most users.
+
+⚡ What is **Sentry**?
+
+**Sentry** is a popular **error tracking and performance monitoring tool**.
+
+It helps you:
+
+- Capture **JavaScript/frontend crashes**.
+- Track **backend errors**.
+- Monitor **performance issues** (slow API calls, page load).
+- See **stack traces + user sessions** to reproduce bugs.
+
+👉 In short: Sentry = a **“black box recorder” for your app’s errors**.
+
+to integrate sentry , first need to install using npm and integrate it to index.js 
+
+the issues/ alerts can be seen in dashboard
+
+install
+
+npm install @sentry/react @sentry/tracing
+
+index.js
+
+import * as Sentry from "@sentry/react";
+import { BrowserTracing } from "@sentry/tracing";
+
+Sentry.init({
+dsn: "https://YOUR_PROJECT_KEY.ingest.sentry.io/YOUR_PROJECT_ID", // from Sentry dashboard
+integrations: [new BrowserTracing()],
+
+// Capture performance issues
+tracesSampleRate: 1.0, // Adjust in production (e.g., 0.2 for 20%)
+});
+
+wrapping app
+
+<Sentry.ErrorBoundary fallback={<p>Something went wrong</p>}>
+<App />
+</Sentry.ErrorBoundary>
+
+adding breadcrumps log and leading to error manuallly
+
+What are **Breadcrumbs**?
+
+Breadcrumbs = **logs of events leading up to an error**.
+
+Example: clicks, route changes, API calls, console logs.
+
+import * as Sentry from "@sentry/react";
+
+// Add breadcrumb manually
+Sentry.addBreadcrumb({
+category: "auth",
+message: "User clicked login button",
+level: "info",  // can be info, warning, error
+});
+
+Eg:
+
+import * as Sentry from "@sentry/react";
+
+function checkout() {
+Sentry.addBreadcrumb({ category: "cart", message: "User clicked checkout", level: "info" });
+
+try {
+// Some failing code
+throw new Error("Payment gateway timeout");
+} catch (err) {
+Sentry.captureException(err);
+}
+}
+
+👉 In Sentry dashboard you’ll see:
+
+1. Breadcrumb → `User clicked checkout`
+2. Error → `Payment gateway timeout`
+
+client-only crashes that QA can’t reproduce are exactly why monitoring tools like **Sentry** (or similar) exist.
+
+- Use `Sentry.captureException(err)` for manual logging.
+
+👉 This ensures that **even if QA can’t reproduce**, the error is captured **on the user’s browser** and sent to your dashboard.
+
+. Use **Breadcrumbs**
+
+Sentry automatically records **breadcrumbs** (console logs, clicks, route changes, API calls).
+
+You can also add **custom breadcrumbs**
+
+This shows the sequence of events that led to the crash.
+
+✅ Debugging Workflow for a Client-Only Crash
+
+**Deploy app with monitoring (Sentry, LogRocket, etc.)**
+
+**User hits crash → Error + breadcrumbs + environment sent to dashboard**
+
+**Developer inspects stack trace + user steps** (QA doesn’t need to reproduce manually)
+
+Optionally, **session replay** shows exact behavior → pinpoint issue.
+
+In short: If QA can’t reproduce, **instrument your frontend** so that **errors debug themselves** : stack trace + breadcrumbs + environment + replay = root cause.

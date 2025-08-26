@@ -1,0 +1,52 @@
+Vitest is a modern testing framework built for JavaScript and TypeScript projects. It’s designed as a fast, lightweight alternative to Jest, especially for projects that use Vite as their build tool (but it also works outside Vite).
+
+unit testing
+Tests one small, isolated piece of code (like a single function, class, or component).
+Goal: Verify that each unit of the application works as expected in isolation.
+Characteristics:
+Fast to run 
+Easy to debug since failures point to a specific function/module
+Often use mocks/stubs to fake dependencies
+Integration Testing
+Tests how multiple units work together (like database + API + UI).
+Goal: Verify that modules interact correctly and the system behaves as intended.
+Characteristics:
+Slower than unit tests 
+Covers real interactions (fewer mocks)
+Can catch bugs unit tests miss
+import Button from './Button';
+import {render,fireEvent,screen} from '@testing-library/react';
+import "@testing-library/jest-dom";
+
+describe('Button Component', () => {
+    it('should render button component',()=>{
+    const handleClick = jest.fn();
+       const {baseElement} = render(<Button  onClick={handleClick}/>)
+       expect(baseElement).toBeTruthy();
+       expect(screen.getByTestId("button")).toBeInTheDocument();
+      fireEvent.click(screen.getByTestId("button"));
+      expect(handleClick).toHaveBeenCalled();
+    });
+});
+
+​
+if want to convert it to vitest 
+need to install packages and setup but code wise
+import statement, vi.fn()
+no other change
+import Button from "./Button";
+import { render, fireEvent, screen } from "@testing-library/react";
+import "@testing-library/jest-dom";
+import { vi, describe, it, expect } from "vitest";
+
+describe("Button Component", () => {
+  it("should render button component", () => {
+    const handleClick = vi.fn();
+    render(<Button data-testid="button" onClick={handleClick} />);
+
+    expect(screen.getByTestId("button")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByTestId("button"));
+    expect(handleClick).toHaveBeenCalled();
+  });
+});

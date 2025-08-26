@@ -1,0 +1,80 @@
+**Github Actions**
+
+to set up yml file for running whenever PR is open
+
+```jsx
+name: CI - Lint, Format, and Test
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+      - '**'   # runs on PRs to any branch, adjust as needed
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20] # add [18,20,22] if you want multi-version checks
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm' # or 'yarn' if you use yarn
+
+      - name: Install dependencies
+        run: npm ci # or yarn install --frozen-lockfile
+
+      # Run ESLint
+      - name: Run ESLint
+        run: npm run lint
+
+      # Run Prettier (check mode, fails if files not formatted)
+      - name: Run Prettier
+        run: npm run format:check
+
+      # Run Jest Tests
+      - name: Run Jest tests
+        run: npm test -- --ci --coverage
+
+package.json
+"scripts": {
+  "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+  "format": "prettier --write .",
+  "format:check": "prettier --check .",
+  "test": "jest"
+}
+
+```
+
+- **on: pull_request** → triggers workflow for PRs.
+- **actions/checkout@v4** → pulls your repo code into the runner.
+- **actions/setup-node@v4** → installs the correct Node.js version and caches dependencies.
+- **npm ci** → clean install based on `package-lock.json` (faster and reproducible).
+- **npm test -- --ci --coverage** → runs Jest in CI mode with coverage reporting.
+
+to do auto deploy preview builds on PR
+
+If using **Vercel** (most common for Next.js/React apps)
+
+Vercel has **built-in GitHub integration** → every PR automatically gets a unique preview URL.
+
+Steps:
+
+1. Connect your repo to Vercel.
+2. Select the branch you want to auto-deploy (usually `main`).
+3. On every PR, Vercel creates a preview like:
+
+```jsx
+https://your-branch-name-your-project.vercel.app
+```
+
+No extra GitHub Actions needed.
