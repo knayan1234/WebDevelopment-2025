@@ -126,6 +126,6 @@ You only do the composition once to create the function, then reuse it multiple 
 
 - Already done
 
-## Currying a function, Law of demeter
+## Currying a function, Law of demeter, partial application
 
 > Difficult topic, need to read it again
