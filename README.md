@@ -1,8 +1,3 @@
-<!-- Optional banner -->
-<p align="center">
-  <img src="https://media.tenor.com/ny8YlYrG55cAAAAC/reading-read-vibes.gif" width="300" alt="Book GIF">
-</p>
-
 # 🌐 WebDevelopment-2025 🚀✨  
 
 Hey, I’m **Nayan** — a React dev stocking a vault of web wisdom.  
@@ -25,7 +20,6 @@ This repo is a **stash** of roadmaps, theory notes, PDF books, and interview pre
 ### 🧩 Frameworks & Libraries (Ecosystem Map)  
 - 🧰 UI kits & design systems: **MUI**, **Tailwind**, etc.  
 - ⚡ Build & tooling vibes: Vite / Next / Turborepo (conceptual overviews)  
-- 🔄 State/data strategies, routing models, DX trade-offs  
 
 ### 🤖 Trends, Workflow & Practice  
 - 🤝 **LLMs in dev**: prompts, code review, scaffolding, guardrails  
