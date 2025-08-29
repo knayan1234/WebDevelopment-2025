@@ -1,48 +1,56 @@
-# 🌐 WebDevelopment-2025 🚀✨
+<!-- Optional banner -->
+<p align="center">
+  <img src="https://media.giphy.com/media/26gsspf0C8s3n6Uuk/giphy.gif" width="300" alt="Book GIF">
+</p>
+
+# 🌐 WebDevelopment-2025 🚀✨  
 
 Hey, I’m **Nayan** — a React dev stocking a vault of web wisdom.  
-This repo is a **stash** of roadmaps, theory notes, PDF books, and interview prep — the brain fuel behind the builds.
+This repo is a **stash** of roadmaps, theory notes, PDF books, and interview prep — the brain fuel behind the builds.  
 
 ---
 
-## 🧭 WHAT’S INSIDE
+## 🧭 What’s Inside  
 
-### 📚 Learning & Reference
+### 📚 Learning & Reference  
+- 📖 PDF books, summaries, and highlight notes  
+- 🗺️ Topic roadmaps (beginner → pro → “what’s next?”)  
+- ❓ Interview question banks + answer outlines  
 
-- PDF books, summaries, and highlight notes
-- Topic roadmaps (beginner → pro → “what’s next?”)
-- Interview question banks + answer outlines
+### ⚛️ Core Stack (Concepts, not code)  
+- 🔑 React & JavaScript fundamentals, patterns, and gotchas  
+- 🛡️ TypeScript theory: types as design, safety vs. velocity  
+- 🎨 CSS thinking: layout systems, tokens, and design semantics  
 
-### ⚛️ Core Stack (Concepts, not code)
+### 🧩 Frameworks & Libraries (Ecosystem Map)  
+- 🧰 UI kits & design systems: **MUI**, **Tailwind**, etc.  
+- ⚡ Build & tooling vibes: Vite / Next / Turborepo (conceptual overviews)  
+- 🔄 State/data strategies, routing models, DX trade-offs  
 
-- React & JavaScript fundamentals, patterns, and gotchas
-- TypeScript theory: types as design, safety vs. velocity
-- CSS thinking: layout systems, tokens, and design semantics
-
-### 🧩 Frameworks & Libraries (Ecosystem Map)
-
-- UI kits & design systems: **MUI**, **Tailwind**, etc.
-- Build & tooling vibes: Vite/Next/Turborepo (conceptual overviews)
-- State/data strategies, routing models, DX trade-offs
-
-### 🤖 Trends, Workflow & Practice
-
-- **LLMs in dev**: prompts, code review, scaffolding, guardrails
-- **GitHub**: branches, PR ritual and review checklists
+### 🤖 Trends, Workflow & Practice  
+- 🤝 **LLMs in dev**: prompts, code review, scaffolding, guardrails  
+- 🌱 **GitHub**: branches, PR ritual, and review checklists  
 
 ---
 
-## 🚀 WHY THIS EXISTS
+## 🚀 Why This Exists  
 
-- To corral **theory** so it doesn’t vanish into tab hell
-- To keep **roadmaps** visible when motivation dips
-- To park **PDFs & notes** where they’re searchable
-- To rehearse with **interview questions** that actually bite
-- To sketch the **shape of 2025 web** without getting stuck in boilerplate
+- 📚 To corral **theory** so it doesn’t vanish into tab hell  
+- 🧭 To keep **roadmaps** visible when motivation dips  
+- 🔎 To park **PDFs & notes** where they’re searchable  
+- 🎯 To rehearse with **interview questions** that actually bite  
+- 🌐 To sketch the **shape of 2025 web** without getting stuck in boilerplate  
 
 ---
 
-## 🧪 NOTES
+## 🧪 Notes  
 
-- An add-on **Love Babbar theory part** and his class mini projects are also included as part of the learning.
-- This is a **thinking space** — concepts first, code elsewhere [LINK TO BE UPLOADED](#).
+- 📝 Includes **Love Babbar theory part** and his class mini projects as part of the learning  
+- 🧠 This is a **thinking space** — concepts first, code elsewhere → [Practice Repo](#)  
+
+---
+
+<p align="center">
+  <b>⚡ Theory lives here. Practice lives there.</b><br><br>
+  <img src="https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif" width="150" alt="Footer Book GIF">
+</p>
