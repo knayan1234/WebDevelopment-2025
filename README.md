@@ -1,6 +1,6 @@
 <!-- Optional banner -->
 <p align="center">
-  <img src="https://media.giphy.com/media/26gsspf0C8s3n6Uuk/giphy.gif" width="300" alt="Book GIF">
+  <img src="https://media.tenor.com/ny8YlYrG55cAAAAC/reading-read-vibes.gif" width="300" alt="Book GIF">
 </p>
 
 # 🌐 WebDevelopment-2025 🚀✨  
@@ -46,7 +46,7 @@ This repo is a **stash** of roadmaps, theory notes, PDF books, and interview pre
 ## 🧪 Notes  
 
 - 📝 Includes **Love Babbar theory part** and his class mini projects as part of the learning  
-- 🧠 This is a **thinking space** — concepts first, code elsewhere → [Practice Repo](#)  
+- 🧠 This is a **thinking space** — concepts first, code elsewhere → [Practice Repo](https://github.com/knayan1234/PracticeQuestions-WebDevelopement2025) 
 
 ---
 
