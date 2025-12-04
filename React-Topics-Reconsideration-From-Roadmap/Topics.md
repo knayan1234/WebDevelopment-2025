@@ -1,11 +1,11 @@
 1. Login form using both state and ref ✅
-2. Debouncing ⁉️
+2. Debouncing ✅
 3. useMemo ✅
 4. useCallback ✅
 5. React.memo ✅
-6. React Hook Form ⁉️
-7. Formik ❌
-8. Yup ❌
+6. React Hook Form ✅
+7. Formik ✅
+8. Yup ✅
 9. Lazy Loading/Routing ✅
 10. React.lazy() and suspense ✅
 11. Router Types ✅
@@ -33,3 +33,10 @@
 33. Jest/vitest unit testing
 34. Cypress
 35. CI/CD
+36. class components
+37. event propagation
+38. synthetic events
+39. state are immutable via its setter
+40. Throttle
+41. useParams
+42. useReducer Hook
