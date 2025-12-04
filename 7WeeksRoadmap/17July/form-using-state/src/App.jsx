@@ -3,14 +3,14 @@ import "./App.css";
 
 function App() {
   const [formDetails, setFormDetails] = useState({
-    name: '',
-    email: '',
-    bday: '',
-    tel: ''
+    name: "",
+    email: "",
+    bday: "",
+    tel: "",
   });
 
   const handleChange = (e) => {
-    console.log("e.target",e.target);
+    console.log("e.target", e.target);
     const { name, value } = e.target;
     setFormDetails((prev) => ({
       ...prev,
@@ -18,14 +18,16 @@ function App() {
     }));
   };
 
-  const submitHandler=()=>{
-    console.log(formDetails)
-  }
-
+  const submitHandler = () => {
+    console.log(formDetails);
+  };
 
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
-      <form  onSubmit={submitHandler} style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+      <form
+        onSubmit={submitHandler}
+        style={{ display: "flex", flexDirection: "column", gap: "10px" }}
+      >
         <label>
           Name:
           <input

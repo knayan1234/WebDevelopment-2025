@@ -2,18 +2,18 @@
 
 The useReducer hook in React is a special tool that helps you manage and change the state (data) of your app, especially if there are lots of different changes happening.
 
-```
+```jsx
 function reducer(currentState, action) {
-  if (action === 'add') {
+  if (action === "add") {
     return currentState + 1;
-  } else if (action === 'subtract') {
+  } else if (action === "subtract") {
     return currentState - 1;
   } else {
     return currentState;
   }
 }
 
-import { useReducer } from 'react';
+import { useReducer } from "react";
 
 function Counter() {
   // set up your counter, starting at 0
@@ -21,9 +21,9 @@ function Counter() {
 
   return (
     <>
-      <button onClick={() => dispatch('subtract')}>-</button>
+      <button onClick={() => dispatch("subtract")}>-</button>
       <span>{count}</span>
-      <button onClick={() => dispatch('add')}>+</button>
+      <button onClick={() => dispatch("add")}>+</button>
     </>
   );
 }

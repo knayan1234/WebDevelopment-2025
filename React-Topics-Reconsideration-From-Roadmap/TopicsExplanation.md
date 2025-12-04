@@ -114,7 +114,7 @@ export default App;
 
 Debouncing is a technique to optimize function execution, such as API calls, by ensuring that a function only runs after the user has stopped triggering an event—like typing in an input box, scrolling, or performing any rapid event—for a specified amount of time
 
-```
+```html
 <input
   class="amount-input"
   type="number"
@@ -123,7 +123,7 @@ Debouncing is a technique to optimize function execution, such as API calls, by 
 <div class="earnings"></div>
 ```
 
-```
+```js
  <script>
       // ES6 Debounce Function
       const debounce = (fn, delay = 400) => {
@@ -145,6 +145,88 @@ Debouncing is a technique to optimize function execution, such as API calls, by 
       const input = document.querySelector('.amount-input');
       input.addEventListener('input', debounce(showEarnings, 500));
     </script>
+```
+
+```jsx
+function App() {
+  const [output, setOutput] = useState("");
+
+function doSomeMagic(functionNeedToDebounce, delay) {
+    let timer;
+    return function (...args) {
+      clearTimeout(timer);
+      timer = setTimeout(() => functionNeedToDebounce(...args), delay);
+    };
+  }
+
+  function mainTask(text) {
+    setOutput(text);
+  }
+
+  const betterFunction = doSomeMagic(mainTask, 1000);
+
+  function handleChange(e) {
+    betterFunction(e.target.value);
+  }
+
+  return (
+    <>
+      <div>
+        Write Text:
+        <input onChange={handleChange} />
+      </div>
+      <p>Debounce Text: {output}</p>
+    </>
+  );
+}
+
+export default App;
+
+import React, { useEffect, useState } from "react";
+
+function App() {
+  const [output, setOutput] = useState("");
+  const [debouncedValue, setDebouncedValue] = useState("");
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedValue(output);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [output]);
+
+  return (
+    <>
+      <div>
+        Write Text:
+        <input onChange={(e) => setOutput(e.target.value)} />
+      </div>
+      <p>Debounce Text: {debouncedValue}</p>
+    </>
+  );
+}
+
+export default App;
+```
+
+```js
+function mainFunctionToRun(text) {
+  debounceText.textContent = text;
+}
+
+function doSomeMagic(fn, delay) {
+  let timer;
+  return function (...agrs) {
+    clearInterval(timer);
+    timer = setTimeout(() => fn(...agrs), delay);
+  };
+}
+
+const betterFunction = doSomeMagic(mainFunctionToRun, 1000);
+
+input.addEventListener("input", (e) => {
+  betterFunction(e.target.value);
+});
 ```
 
 ---
@@ -251,6 +333,8 @@ export default function App() {
 > Todo
 
 ---
+
+[PerplexityChat](https://www.perplexity.ai/search/react-hook-form-formik-yup-go-ML6wqPbjQEGGMyBvsf_dWA)
 
 ### 9.Lazy Loading/Routing, 10.React.lazy() and suspense
 
@@ -433,3 +517,53 @@ In React: Pure React apps (without Next.js) often use CSR by default.
 **Why it's needed**: It speeds up content delivery, handles high traffic, and improves reliability by offloading work from your main server. It's essential for global apps to minimize load times.
 
 **Real-world analogy**: Think of a chain of coffee shops (CDN servers) spread across cities. Instead of everyone driving to one central roastery (origin server) for coffee, you get it from the nearest shop, which has pre-stocked beans. This way, your coffee arrives hot and fast, no matter where you are, without overwhelming the main roastery.
+
+### 40. Throttle
+
+```jsx
+import React, { useState, useRef } from "react";
+
+function App() {
+  const [output, setOutput] = useState("");
+  const waitingRef = useRef(false);
+  const lastArgsRef = useRef(null);
+
+  function MainWork(value) {
+    setOutput(value);
+  }
+
+  function doSomeMagic(functionToWorkOn, delay = 1000) {
+    return function (...args) {
+      lastArgsRef.current = args;
+      if (!waitingRef.current) {
+        functionToWorkOn(...args);
+        waitingRef.current = true;
+        setTimeout(() => {
+          waitingRef.current = false;
+          if (lastArgsRef.current) {
+            functionToWorkOn(...lastArgsRef.current);
+            lastArgsRef.current = null;
+          }
+        }, delay);
+      }
+    };
+  }
+
+  const betterFunction = doSomeMagic(MainWork, 1000);
+
+  function handleChange(e) {
+    betterFunction(e.target.value);
+  }
+  return (
+    <>
+      <div>
+        Write Text:
+        <input onChange={handleChange} />
+      </div>
+      <p>Throttle Text: {output}</p>
+    </>
+  );
+}
+
+export default App;
+```
